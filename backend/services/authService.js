@@ -5,9 +5,14 @@ const User = require("../models/User");
 // Load environment variables
 const secret = process.env.SECRET_KEY;
 
-exports.register = async (username, password) => {
+exports.register = async (firstName, lastName, username, password) => {
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = new User({ username, password: hashedPassword });
+  const user = new User({
+    firstName,
+    lastName,
+    username,
+    password: hashedPassword,
+  });
   await user.save();
   return user;
 };

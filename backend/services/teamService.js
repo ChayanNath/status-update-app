@@ -43,3 +43,12 @@ exports.grantAdmin = async (userId) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+exports.getTeams = async () => {
+  try {
+    const teams = await Team.find();
+    return teams;
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};

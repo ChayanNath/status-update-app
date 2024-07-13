@@ -12,4 +12,6 @@ router.post("/create", adminMiddleware, teamController.createTeam);
 // Route to add a member to a team
 router.post("/addMember", adminMiddleware, teamController.addMember);
 
+router.get("/getallteams", teamController.getTeams);
+
 module.exports = router;

@@ -33,3 +33,12 @@ exports.grantAdmin = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+exports.getTeams = async (req, res) => {
+  try {
+    const teams = await teamService.getTeams();
+    res.json(teams);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
