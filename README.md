@@ -22,7 +22,6 @@ This application is designed to help teams update and track their daily tasks an
 ### Prerequisites
 
 - Node.js
-- PostgreSQL
 - npm or yarn
 
 ### Installation
