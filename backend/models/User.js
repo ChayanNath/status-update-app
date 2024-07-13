@@ -5,6 +5,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   team: { type: mongoose.Schema.Types.ObjectId, ref: "Team" },
   isAdmin: { type: Boolean, default: false },
+  isSuperUser: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model("User", UserSchema);

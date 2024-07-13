@@ -22,3 +22,24 @@ exports.addMember = async (teamId, userId) => {
   await user.save();
   return team;
 };
+
+// function for granting admin privileges
+exports.grantAdmin = async (userId) => {
+  try {
+    if (!userId) {
+      throw new Error("User id is not available");
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("User not found!");
+    }
+
+    user.isAdmin = true;
+    await user.save();
+
+    return user;
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
