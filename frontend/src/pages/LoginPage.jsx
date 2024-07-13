@@ -1,28 +1,28 @@
 import LoginForm from "../components/Auth/LoginForm";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../api/authApi";
-import { setAuthToken } from "../api";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUserThunk } from "../redux/features/auth/authSlice";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.auth);
 
   const handleLogin = async (values, { setSubmitting, setErrors }) => {
     try {
-      const data = await loginUser(values);
-      localStorage.setItem("token", data.token);
-      setAuthToken(data.token);
+      await dispatch(loginUserThunk(values)).unwrap();
       navigate("/dashboard");
     } catch (error) {
       setSubmitting(false);
-      if (error.response && error.response.data) {
-        setErrors({ submit: error.response.data.message });
-      } else {
-        setErrors({ submit: "An error occurred. Please try again." });
-      }
+      setErrors({ submit: error });
     }
   };
 
-  return <LoginForm onSubmit={handleLogin} />;
+  return (
+    <div>
+      <LoginForm onSubmit={handleLogin} loading={loading} error={error} />
+    </div>
+  );
 };
 
 export default LoginPage;

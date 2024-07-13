@@ -6,7 +6,7 @@ const LoginSchema = Yup.object().shape({
   password: Yup.string().required("Required"),
 });
 
-const LoginForm = ({ onSubmit }) => (
+const LoginForm = ({ onSubmit, loading, error }) => (
   <Formik
     initialValues={{ username: "", password: "" }}
     validationSchema={LoginSchema}
@@ -43,9 +43,11 @@ const LoginForm = ({ onSubmit }) => (
         <button
           type="submit"
           className="w-full bg-blue-500 text-white p-2 rounded-lg"
+          disabled={loading}
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
+        {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
       </Form>
     )}
   </Formik>
