@@ -32,46 +32,44 @@ export const loginUserThunk = createAsyncThunk(
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    isAuthenticated: false,
     user: null,
-    avatarUrl: "",
+    token: null,
     loading: false,
     error: null,
   },
   reducers: {
     logout: (state) => {
-      state.isAuthenticated = false;
       state.user = null;
-      state.avatarUrl = "";
+      state.token = null;
       localStorage.removeItem("token");
-    },
-    setAvatarUrl: (state, action) => {
-      state.avatarUrl = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(registerUserThunk.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(registerUserThunk.fulfilled, (state) => {
-        state.loading = false;
-      })
-      .addCase(registerUserThunk.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
       .addCase(loginUserThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(loginUserThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.isAuthenticated = true;
         state.user = action.payload.user;
+        state.token = action.payload.token;
+        localStorage.setItem("token", action.payload.token);
       })
       .addCase(loginUserThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(registerUserThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(registerUserThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+      })
+      .addCase(registerUserThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

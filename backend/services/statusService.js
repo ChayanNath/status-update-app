@@ -5,9 +5,16 @@ const excelExporter = require("../utils/excelExporter");
 
 exports.addStatus = async (title, description, userId, teamId) => {
   const user = await User.findById(userId);
-  const team = await Team.findById(teamId);
-  if (!user || !team) {
-    throw new Error("User or team not found");
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  let team = null;
+  if (teamId) {
+    team = await Team.findById(teamId);
+    if (!team) {
+      throw new Error("Team not found");
+    }
   }
   const status = new Status({ title, description, user, team });
   await status.save();

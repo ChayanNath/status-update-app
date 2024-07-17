@@ -13,7 +13,7 @@ const RegisterSchema = Yup.object().shape({
     .required("Confirm Password is required"),
 });
 
-const RegisterForm = ({ onSubmit }) => (
+const RegisterForm = ({ onSubmit, loading, error }) => (
   <Formik
     initialValues={{
       firstName: "",
@@ -92,8 +92,9 @@ const RegisterForm = ({ onSubmit }) => (
           type="submit"
           className="w-full bg-blue-500 text-white p-2 rounded-lg"
         >
-          Register
+          {loading ? "Hooking you up..." : "Register"}
         </button>
+        {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
       </Form>
     )}
   </Formik>

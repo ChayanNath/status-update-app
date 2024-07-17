@@ -24,9 +24,7 @@ const RegisterPage = () => {
 
   return (
     <div>
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-      <RegisterForm onSubmit={handleRegister} />
+      <RegisterForm onSubmit={handleRegister} loading={loading} error={error} />
     </div>
   );
 };
