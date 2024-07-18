@@ -43,6 +43,11 @@ app.use(
   passport.authenticate("jwt", { session: false }),
   statusRoutes
 );
+app.use(
+  "/api/users",
+  passport.authenticate("jwt", { session: false }),
+  statusRoutes
+);
 
 // Handle production
 if (process.env.NODE_ENV === "production") {
