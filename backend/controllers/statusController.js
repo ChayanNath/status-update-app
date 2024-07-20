@@ -31,8 +31,6 @@ exports.getStatuses = async (req, res) => {
 
       startDate = yesterday.toISOString();
       endDate = today.toISOString();
-
-      console.log(`startDate: ${startDate}, endDate: ${endDate}`);
     }
 
     const statuses = await statusService.getStatuses(

@@ -12,6 +12,7 @@ dotenv.config();
 const authRoutes = require("./routes/authRoutes");
 const teamRoutes = require("./routes/teamRoutes");
 const statusRoutes = require("./routes/statusRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 // Import database configuration
 const connectDB = require("./config/db");
@@ -46,7 +47,7 @@ app.use(
 app.use(
   "/api/users",
   passport.authenticate("jwt", { session: false }),
-  statusRoutes
+  userRoutes
 );
 
 // Handle production

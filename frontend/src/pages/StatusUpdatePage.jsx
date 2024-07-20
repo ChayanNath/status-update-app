@@ -11,8 +11,7 @@ const StatusUpdate = () => {
   const handleSubmit = async (values) => {
     try {
       setSubmitting(true);
-      const response = await updateStatus(values);
-      console.log(response);
+      await updateStatus(values);
       setSubmitting(false);
       navigate("/dashboard");
     } catch (error) {

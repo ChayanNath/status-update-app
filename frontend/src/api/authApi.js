@@ -12,4 +12,14 @@ export const loginUser = async (userData) => {
   return response.data;
 };
 
+export const getUsersWithoutTeam = async () => {
+  const response = await api.get("/api/users/without-team");
+  return response.data;
+};
+
+export const getAllUsers = async () => {
+  const response = await api.get("/api/users/all");
+  return response.data;
+};
+
 export default api;
