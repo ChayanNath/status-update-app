@@ -1,7 +1,13 @@
 import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useAuth } from "../../hooks/useAuth"; // Adjust the path to your useAuth hook
 
 const PrivateRoute = ({ children }) => {
-  const isAuthenticated = !!localStorage.getItem("token"); // Replace this with your actual auth check
+  useAuth(); // Initialize authentication check
+
+  const { user } = useSelector((state) => state.auth);
+  const isAuthenticated = !!user;
+
   return isAuthenticated ? children : <Navigate to="/login" />;
 };
 

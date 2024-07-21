@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { registerUser, loginUser } from "../../../api/authApi";
+import { registerUser, loginUser, logoutUser } from "../../../api/authApi";
 
 // Async thunk for user registration
 export const registerUserThunk = createAsyncThunk(
@@ -20,9 +20,20 @@ export const loginUserThunk = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const response = await loginUser(userData);
-      const { user, token } = response;
-      localStorage.setItem("token", token);
-      return { user, token };
+      const { user } = response;
+      return { user };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+// Async thunk for user logout
+export const logoutThunk = createAsyncThunk(
+  "auth/logoutUser",
+  async (_, thunkAPI) => {
+    try {
+      await logoutUser(); // Call to server to handle logout
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -33,15 +44,15 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: null,
-    token: null,
     loading: false,
     error: null,
   },
   reducers: {
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
     logout: (state) => {
       state.user = null;
-      state.token = null;
-      localStorage.removeItem("token");
     },
   },
   extraReducers: (builder) => {
@@ -53,8 +64,6 @@ const authSlice = createSlice({
       .addCase(loginUserThunk.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
-        state.token = action.payload.token;
-        localStorage.setItem("token", action.payload.token);
       })
       .addCase(loginUserThunk.rejected, (state, action) => {
         state.loading = false;
@@ -67,15 +76,26 @@ const authSlice = createSlice({
       .addCase(registerUserThunk.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
-        state.token = action.payload.token;
       })
       .addCase(registerUserThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(logoutThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(logoutThunk.fulfilled, (state) => {
+        state.loading = false;
+        state.user = null;
+      })
+      .addCase(logoutThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
   },
 });
 
-export const { logout, setAvatarUrl } = authSlice.actions;
+export const { setUser, logout } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -26,7 +26,13 @@ exports.login = async (username, password) => {
   if (!isMatch) {
     throw new Error("Invalid username or password");
   }
-  const payload = { id: user._id, username: user.username };
+
+  const payload = {
+    id: user._id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    isAdmin: user.isAdmin || false,
+  };
   const token = jwt.sign(payload, secret, { expiresIn: "1h" });
-  return { user, token };
+  return { payload, token };
 };

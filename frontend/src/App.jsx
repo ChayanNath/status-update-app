@@ -11,46 +11,69 @@ import TeamPage from "./pages/TeamPage";
 import StatusUpdatePage from "./pages/StatusUpdatePage";
 import Navbar from "./components/Common/Navbar";
 import PrivateRoute from "./components/Common/PrivateRoute";
+import PublicRoute from "./components/Common/PublicRoute";
 import store from "./redux/store";
 import { Provider } from "react-redux";
+import { useAuth } from "./hooks/useAuth";
+
+function AuthProvider({ children }) {
+  useAuth();
+  return children;
+}
 
 function App() {
   return (
     <Provider store={store}>
-      <Router>
-        <Navbar />
-        <div className="container mx-auto">
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route
-              path="/dashboard"
-              element={
-                <PrivateRoute>
-                  <DashboardPage />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/team/:id"
-              element={
-                <PrivateRoute>
-                  <TeamPage />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/status-update"
-              element={
-                <PrivateRoute>
-                  <StatusUpdatePage />
-                </PrivateRoute>
-              }
-            />
-            <Route path="*" element={<Navigate to="/login" />} />
-          </Routes>
-        </div>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Navbar />
+          <div className="container mx-auto">
+            <Routes>
+              <Route
+                path="/login"
+                element={
+                  <PublicRoute>
+                    <LoginPage />
+                  </PublicRoute>
+                }
+              />
+              <Route
+                path="/register"
+                element={
+                  <PublicRoute>
+                    <RegisterPage />
+                  </PublicRoute>
+                }
+              />
+              <Route
+                path="/dashboard"
+                element={
+                  <PrivateRoute>
+                    <DashboardPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/team/:id"
+                element={
+                  <PrivateRoute>
+                    <TeamPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/status-update"
+                element={
+                  <PrivateRoute>
+                    <StatusUpdatePage />
+                  </PrivateRoute>
+                }
+              />
+              <Route path="*" element={<Navigate to="/login" />} />
+            </Routes>
+          </div>
+        </Router>
+      </AuthProvider>
     </Provider>
   );
 }

@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const passport = require("passport");
 const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser");
 
 // Load environment variables from .env file
 dotenv.config();
@@ -26,7 +27,13 @@ connectDB();
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors());
+app.use(cookieParser()); // Add cookie-parser middleware
+app.use(
+  cors({
+    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173", // Adjust to your frontend URL
+    credentials: true, // Allow cookies to be sent
+  })
+);
 
 // Passport middleware
 app.use(passport.initialize());

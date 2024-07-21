@@ -12,6 +12,10 @@ export const loginUser = async (userData) => {
   return response.data;
 };
 
+export const logoutUser = async () => {
+  await api.post("/api/auth/logout");
+};
+
 export const getUsersWithoutTeam = async () => {
   const response = await api.get("/api/users/without-team");
   return response.data;

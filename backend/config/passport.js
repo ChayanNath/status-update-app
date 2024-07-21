@@ -6,8 +6,16 @@ const dotenv = require("dotenv");
 // Load environment variables
 dotenv.config();
 
+const cookieExtractor = (req) => {
+  let token = null;
+  if (req && req.cookies) {
+    token = req.cookies.token;
+  }
+  return token;
+};
+
 const options = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  jwtFromRequest: cookieExtractor, // Extract JWT from cookies
   secretOrKey: process.env.SECRET_KEY,
 };
 

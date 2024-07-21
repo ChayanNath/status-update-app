@@ -1,15 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../redux/features/auth/authSlice";
+import { logoutThunk } from "../../redux/features/auth/authSlice";
 import { FaUserCircle } from "react-icons/fa";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  const token = !!localStorage.getItem("token");
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logoutThunk());
     navigate("/login");
   };
 
@@ -20,7 +19,7 @@ const Navbar = () => {
           Status Update
         </Link>
         <div className="flex items-center">
-          {token ? (
+          {user ? (
             <>
               <Link to="/status-update" className="text-white mr-4">
                 Update Status
