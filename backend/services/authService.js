@@ -32,6 +32,7 @@ exports.login = async (username, password) => {
     firstName: user.firstName,
     lastName: user.lastName,
     isAdmin: user.isAdmin || false,
+    team: user.team || null,
   };
   const token = jwt.sign(payload, secret, { expiresIn: "1h" });
   return { payload, token };

@@ -20,19 +20,44 @@ exports.getStatuses = async (req, res) => {
   try {
     let { startDate, endDate, teamId } = req.query;
 
-    // If startDate and endDate are not provided, default to fetching last day's status
+    // Set default to fetch today's status after 10:30 AM
     if (!startDate && !endDate) {
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate());
-      yesterday.setHours(0, 0, 0, 0); // Set time to 00:00:00.000
-
       const today = new Date();
-      today.setHours(10, 30, 0, 0); // Set time to 10:30:00.000
+      const now = new Date();
 
-      startDate = yesterday.toISOString();
-      endDate = today.toISOString();
+      // Set time for today's start and end dates
+      const startOfToday = new Date(today.setHours(10, 30, 0, 0)).toISOString();
+      const endOfToday = now.toISOString(); // Fetch until current time
+
+      // Fetch today's statuses first
+      const statusesToday = await statusService.getStatuses(
+        startOfToday,
+        endOfToday,
+        teamId
+      );
+
+      // If no statuses are found for today, fetch yesterday's statuses
+      if (statusesToday.length === 0) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        yesterday.setHours(0, 0, 0, 0); // Start of yesterday
+
+        const startOfYesterday = yesterday.toISOString();
+        const endOfYesterday = today.setHours(0, 0, 0, 0).toISOString(); // End of yesterday
+
+        const statusesYesterday = await statusService.getStatuses(
+          startOfYesterday,
+          endOfYesterday,
+          teamId
+        );
+
+        return res.json(statusesYesterday);
+      }
+
+      return res.json(statusesToday);
     }
 
+    // If startDate and endDate are provided, use them
     const statuses = await statusService.getStatuses(
       startDate,
       endDate,

@@ -4,6 +4,7 @@ import TeamList from "../components/Dashboard/TeamList";
 import Button from "../components/ui/Button";
 import AddTeamForm from "../components/Team/AddTeamForm";
 import { getUsersWithoutTeam, getAllUsers } from "../api/authApi";
+import { useNavigate } from "react-router-dom";
 
 const TeamPage = () => {
   const [teams, setTeams] = useState([]);
@@ -13,6 +14,7 @@ const TeamPage = () => {
   const [editTeam, setEditTeam] = useState(null); // State to hold the team being edited
   const [usersWithoutTeam, setUsersWithoutTeam] = useState([]); // State to hold users without a team
   const [allUsers, setAllUsers] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -86,6 +88,10 @@ const TeamPage = () => {
     setAddTeamForm(true);
   };
 
+  const handleCardClick = (teamId) => {
+    navigate(`/team/${teamId}`);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -104,11 +110,15 @@ const TeamPage = () => {
         <AddTeamForm
           onSubmit={editTeam ? editTeamHandler : addTeamHandler}
           initialValues={
-            { name: editTeam.name, teamMembers: editTeam.members } || {
-              name: "",
-              teamMembers: [],
-            }
+            editTeam
+              ? { name: editTeam.name, teamMembers: editTeam.members }
+              : {
+                  name: "",
+                  teamMembers: [],
+                }
           }
+          // TODO: Fix the bug here, it will show all users in case of edit even
+          // if they are already on a team
           users={editTeam ? allUsers : usersWithoutTeam}
           loading={loading}
           error={error}
@@ -121,6 +131,7 @@ const TeamPage = () => {
           setEditTeam(team);
           setAddTeamForm(true);
         }}
+        onCardClick={handleCardClick}
       />
     </div>
   );

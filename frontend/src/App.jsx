@@ -7,7 +7,6 @@ import {
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
-import TeamPage from "./pages/TeamPage";
 import StatusUpdatePage from "./pages/StatusUpdatePage";
 import Navbar from "./components/Common/Navbar";
 import PrivateRoute from "./components/Common/PrivateRoute";
@@ -15,6 +14,7 @@ import PublicRoute from "./components/Common/PublicRoute";
 import store from "./redux/store";
 import { Provider } from "react-redux";
 import { useAuth } from "./hooks/useAuth";
+import TeamDetailsPage from "./pages/TeamDetailsPage";
 
 function AuthProvider({ children }) {
   useAuth();
@@ -57,7 +57,7 @@ function App() {
                 path="/team/:id"
                 element={
                   <PrivateRoute>
-                    <TeamPage />
+                    <TeamDetailsPage />
                   </PrivateRoute>
                 }
               />

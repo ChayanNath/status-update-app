@@ -5,4 +5,9 @@ export const updateStatus = async (statusData) => {
   return response.data;
 };
 
+export const getTeamStatus = async (id) => {
+  const response = await api.get(`/api/status/get?teamId=${id}`);
+  return response.data;
+};
+
 export default api;
