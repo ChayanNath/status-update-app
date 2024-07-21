@@ -15,6 +15,8 @@ import store from "./redux/store";
 import { Provider } from "react-redux";
 import { useAuth } from "./hooks/useAuth";
 import TeamDetailsPage from "./pages/TeamDetailsPage";
+import { injectStore } from "./api/api";
+injectStore(store);
 
 function AuthProvider({ children }) {
   useAuth();

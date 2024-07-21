@@ -44,6 +44,12 @@ exports.logout = async (req, res) => {
       expires: new Date(0), // Expire the cookie immediately
     });
 
+    res.cookie("userDetails", "", {
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+      expires: new Date(0), // Expire the cookie immediately
+    });
+
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });

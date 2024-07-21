@@ -1,4 +1,4 @@
-import api from "../api";
+import api from "./api";
 
 export const updateStatus = async (statusData) => {
   const response = await api.post("/api/status/add", statusData);
