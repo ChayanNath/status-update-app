@@ -8,6 +8,7 @@ const UserSchema = new mongoose.Schema({
   team: { type: mongoose.Schema.Types.ObjectId, ref: "Team" },
   isAdmin: { type: Boolean, default: false },
   isSuperUser: { type: Boolean, default: false },
+  fineAmount: { type: Number, default: 0 },
 });
 
 module.exports = mongoose.model("User", UserSchema);

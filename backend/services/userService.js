@@ -23,3 +23,32 @@ exports.getAllUsers = async () => {
     throw new Error("Error fetching users: " + error.message);
   }
 };
+
+exports.addFine = async (userId, statusId, fine = 10) => {
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Find the status update for the user
+    const status = await Status.findById(statusId);
+
+    if (!status) {
+      throw new Error("Status update not found");
+    }
+
+    // Add fine entry to the status document
+    status.fine = fine;
+    await status.save();
+
+    // Update the user's total fine amount
+    user.fineAmount += fine;
+    await user.save();
+
+    return { message: "Fine added successfully", fineAmount: user.fineAmount };
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};

@@ -6,6 +6,7 @@ const StatusSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   team: { type: mongoose.Schema.Types.ObjectId, ref: "Team", allowNull: true },
   date: { type: Date, default: Date.now },
+  fine: { type: Number, default: 0 },
 });
 
 module.exports = mongoose.model("Status", StatusSchema);

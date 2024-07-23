@@ -7,4 +7,6 @@ router.get("/without-team", userController.getUsersWithoutTeam);
 
 router.get("/all", userController.getAllUsers);
 
+router.post("/add-fine", userController.addFine);
+
 module.exports = router;
