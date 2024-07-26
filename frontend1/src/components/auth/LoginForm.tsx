@@ -96,7 +96,9 @@ const LoginForm = () => {
           </Button>
           <div className="mt-3 self-start">
             <span>No account?</span>
-            <Link to="/register">Sign up</Link>
+            <Link className="ml-2 underline" to="/register">
+              Sign up
+            </Link>
           </div>
         </CardFooter>
       </form>

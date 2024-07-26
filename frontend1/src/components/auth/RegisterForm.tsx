@@ -154,7 +154,9 @@ const RegisterForm = () => {
           </Button>
           <div className="mt-3 self-start">
             <span>Have an account?</span>
-            <Link to="/login">Sign In</Link>
+            <Link className="ml-2 underline" to="/login">
+              Sign In
+            </Link>
           </div>
         </CardFooter>
       </form>
