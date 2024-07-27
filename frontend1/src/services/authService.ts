@@ -1,5 +1,5 @@
 import apiClient from "./apiClient";
-import { UserRegistration } from "@/types/user-registration";
+import { UserRegistration } from "@/types/user";
 
 export const login = async (username: string, password: string) => {
   const response = await apiClient.post("/auth/login", { username, password });

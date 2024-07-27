@@ -1,13 +1,6 @@
+import { User } from "@/types/user";
 import { useAuth } from "./useAuth";
 import { useLocalStorage } from "./useLocalStorage";
-
-export interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  isAdmin: boolean;
-  team: string;
-}
 
 export const useUser = () => {
   const { user, setUser } = useAuth();
