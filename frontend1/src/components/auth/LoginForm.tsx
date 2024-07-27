@@ -64,7 +64,7 @@ const LoginForm = () => {
       toast({
         title: "Login Failed",
         description: "Incorrect username or password.",
-        variant: "destructive", // Or any variant you have for error notifications
+        variant: "destructive",
       });
     }
   };

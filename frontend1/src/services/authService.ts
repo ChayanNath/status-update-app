@@ -1,13 +1,13 @@
 import apiClient from "./apiClient";
-import { User } from "../hooks/useUser";
+import { UserRegistration } from "@/types/user-registration";
 
 export const login = async (username: string, password: string) => {
   const response = await apiClient.post("/auth/login", { username, password });
   return response.data;
 };
 
-export const register = async (userData: User) => {
-  const response = await apiClient.post("/register", userData);
+export const register = async (userData: UserRegistration) => {
+  const response = await apiClient.post("/auth/register", userData);
   return response.data;
 };
 
