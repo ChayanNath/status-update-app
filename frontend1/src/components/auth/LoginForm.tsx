@@ -20,8 +20,9 @@ import {
   CardTitle,
 } from "../ui/card";
 import { toast } from "../ui/use-toast";
-import { Link } from "react-router-dom";
-import RedLogo from "../../assets/tasks-red.svg";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../../services/authService";
+import { useUser } from "../../hooks/useUser";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -41,22 +42,37 @@ const LoginForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      ),
-    });
+  const navigate = useNavigate();
+  const { setUser } = useUser();
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      // Call the login API
+      const response = await login(values.username, values.password);
+
+      setUser(response);
+
+      // Show success toast and redirect
+      toast({
+        title: "Login Successful",
+        description: "Redirecting to your dashboard...",
+      });
+
+      navigate("/dashboard");
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Login Failed",
+        description: "Incorrect username or password.",
+        variant: "destructive", // Or any variant you have for error notifications
+      });
+    }
   };
 
   return (
     <Card className="w-[350px]">
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <CardHeader>
-          <img src={RedLogo} className="h-10 w-10" />
           <CardTitle className="text-xl">Sign in</CardTitle>
           <CardDescription>to continue to Progress Tracker</CardDescription>
         </CardHeader>
@@ -82,7 +98,11 @@ const LoginForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your password" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="Enter your password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

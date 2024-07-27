@@ -21,7 +21,6 @@ import {
 } from "../ui/card";
 import { toast } from "../ui/use-toast";
 import { Link } from "react-router-dom";
-import RedLogo from "../../assets/tasks-red.svg";
 
 const formSchema = z
   .object({
@@ -73,7 +72,6 @@ const RegisterForm = () => {
     <Card className="w-[350px]">
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <CardHeader>
-          <img src={RedLogo} className="h-10 w-10" />
           <CardTitle className="text-xl">Create your account</CardTitle>
           <CardDescription>to continue to Progress Tracker</CardDescription>
         </CardHeader>

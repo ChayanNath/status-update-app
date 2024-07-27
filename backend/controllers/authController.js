@@ -21,12 +21,8 @@ exports.login = async (req, res) => {
     const { payload, token } = await authService.login(username, password);
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: "Strict",
-    });
-    res.cookie("userDetails", JSON.stringify(payload), {
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
     });
 
     res.json(payload);
@@ -39,14 +35,8 @@ exports.logout = async (req, res) => {
   try {
     res.cookie("token", "", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Secure cookie only in production
+      secure: true, // Secure cookie only in production
       sameSite: "Strict",
-      expires: new Date(0), // Expire the cookie immediately
-    });
-
-    res.cookie("userDetails", "", {
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
       expires: new Date(0), // Expire the cookie immediately
     });
 
