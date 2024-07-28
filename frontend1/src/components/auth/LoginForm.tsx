@@ -43,24 +43,15 @@ const LoginForm = () => {
   });
 
   const navigate = useNavigate();
-  const { setUser } = useUser();
+  const { addUser } = useUser();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // Call the login API
       const response = await login(values.username, values.password);
 
-      setUser(response);
-
-      // Show success toast and redirect
-      toast({
-        title: "Login Successful",
-        description: "Redirecting to your dashboard...",
-      });
-
+      addUser(response);
       navigate("/dashboard");
     } catch (error) {
-      console.log(error);
       toast({
         title: "Login Failed",
         description: "Incorrect username or password.",

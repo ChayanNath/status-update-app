@@ -7,6 +7,7 @@ import NotFound from "../pages/NotFound";
 import PublicRoute from "./PublicRoute";
 import ProtectedRoute from "./ProtectedRoute";
 import Home from "@/pages/Home";
+import Layout from "@/components/layout/Layout";
 
 const router = createBrowserRouter([
   {
@@ -23,8 +24,14 @@ const router = createBrowserRouter([
     path: "/",
     element: <ProtectedRoute />,
     children: [
-      { path: "", element: <Home /> },
-      { path: "dashboard", element: <Dashboard /> },
+      {
+        path: "",
+        element: <Layout />, // Use Layout here
+        children: [
+          { path: "", element: <Home /> },
+          { path: "dashboard", element: <Dashboard /> },
+        ],
+      },
     ],
   },
   {

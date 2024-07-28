@@ -42,8 +42,9 @@ exports.login = async (req, res) => {
 
 exports.logout = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const user = await User.findById(userId);
+    const userId = req.user._id; // Assuming req.user is set by your authentication middleware
+
+    await authService.logout(userId);
 
     res.cookie("token", "", {
       httpOnly: true,
@@ -52,8 +53,6 @@ exports.logout = async (req, res) => {
       expires: new Date(0),
     });
 
-    user.refreshToken = null;
-    user.save();
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });

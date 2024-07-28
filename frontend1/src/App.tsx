@@ -8,9 +8,7 @@ function App() {
   return (
     <AuthProvider>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <main className="h-screen">
-          <AppRouter />
-        </main>
+        <AppRouter />
         <Toaster />
       </ThemeProvider>
     </AuthProvider>

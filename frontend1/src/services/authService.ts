@@ -12,7 +12,7 @@ export const register = async (userData: UserRegistration) => {
 };
 
 export const logout = async () => {
-  await apiClient.post("/logout");
+  await apiClient.post("/auth/logout");
 };
 
 export const getUsersWithoutTeam = async () => {

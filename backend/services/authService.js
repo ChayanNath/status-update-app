@@ -86,3 +86,13 @@ exports.refreshToken = async (oldRefreshToken) => {
     throw new Error("Invalid refresh token");
   }
 };
+
+exports.logout = async (userId) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  user.refreshToken = null;
+  await user.save();
+};
