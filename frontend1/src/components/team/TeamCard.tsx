@@ -3,11 +3,11 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Team } from "@/types/team";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface TeamCardProps {
   team: Team;
@@ -17,18 +17,19 @@ const TeamCard: React.FC<TeamCardProps> = ({ team }) => {
   return (
     <Card className="w-[300px] cursor-pointer hover:bg-accent">
       <CardHeader>
-        <CardTitle>{team.name}</CardTitle>
+        <div className="flex items-center justify-items-center flex-col gap-3 mb-3">
+          <Avatar>
+            <AvatarImage
+              src={`https://api.dicebear.com/9.x/fun-emoji/svg?seed=${team.name}`}
+              alt="Team Image"
+            />
+            <AvatarFallback>{team.name}</AvatarFallback>
+          </Avatar>
+          <CardTitle className="text-2xl">{team.name}</CardTitle>
+        </div>
         <CardDescription>{team.description}</CardDescription>
       </CardHeader>
-      <CardContent>
-        <form>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5"></div>
-            <div className="flex flex-col space-y-1.5"></div>
-          </div>
-        </form>
-      </CardContent>
-      <CardFooter className="flex justify-between"></CardFooter>
+      <CardContent>Members: {team.members.length}</CardContent>
     </Card>
   );
 };

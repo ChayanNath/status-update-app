@@ -2,7 +2,7 @@ const Team = require("../models/Team");
 const User = require("../models/User");
 const mongoose = require("mongoose");
 
-exports.createTeam = async (name, teamMembers) => {
+exports.createTeam = async (name, teamMembers, description) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
@@ -20,14 +20,15 @@ exports.createTeam = async (name, teamMembers) => {
 
       // Add members to team
       team.members = teamMembers;
+      team.description = description;
       await team.save({ session });
     }
 
     // Query the team again to populate it
     const populatedTeam = await Team.findById(team._id)
-      .populate("members", "_id") // Only populate the _id field
+      .populate("members", "_id", "description") // Only populate the _id field
       .session(session)
-      .select("name members"); // Select only the name and members fields
+      .select("name members description"); // Select only the name and members fields
 
     await session.commitTransaction();
     session.endSession();
@@ -40,7 +41,7 @@ exports.createTeam = async (name, teamMembers) => {
   }
 };
 
-exports.updateTeam = async (teamId, name, teamMembers) => {
+exports.updateTeam = async (teamId, name, teamMembers, description) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
@@ -70,12 +71,13 @@ exports.updateTeam = async (teamId, name, teamMembers) => {
 
       // Update the team's members field
       team.members = teamMembers;
+      team.description = description;
     }
 
     await team.save({ session });
 
     const populatedTeam = await Team.findById(team._id)
-      .populate("members", "_id") // Only populate _id field
+      .populate("members", "_id", "description") // Only populate _id field
       .session(session);
 
     await session.commitTransaction();
