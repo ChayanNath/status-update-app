@@ -21,7 +21,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col gap-2">
-      <h1 className="text-xl">Team Overview</h1>
+      <h1 className="text-xl">Teams overview</h1>
       <div className="flex flex-wrap gap-3">
         {teams && teams.length > 0 ? (
           teams.map((team: Team) => <TeamCard team={team} key={team._id} />)
