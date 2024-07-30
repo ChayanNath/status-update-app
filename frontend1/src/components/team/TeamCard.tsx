@@ -15,7 +15,7 @@ interface TeamCardProps {
 
 const TeamCard: React.FC<TeamCardProps> = ({ team }) => {
   return (
-    <Card className="w-[300px]">
+    <Card className="w-[300px] cursor-pointer hover:bg-accent">
       <CardHeader>
         <CardTitle>{team.name}</CardTitle>
         <CardDescription>{team.description}</CardDescription>

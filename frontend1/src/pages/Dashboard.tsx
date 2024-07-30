@@ -1,4 +1,4 @@
-import TeamCard from "@/components/common/TeamCard";
+import TeamCard from "@/components/team/TeamCard";
 import { getTeams } from "@/services/teamService";
 import { Team } from "@/types/team";
 import { useState, useEffect } from "react";
@@ -24,7 +24,7 @@ const Dashboard = () => {
       <h1 className="text-xl">Team Overview</h1>
       <div className="flex flex-wrap gap-3">
         {teams && teams.length > 0 ? (
-          teams.map((team: Team) => <TeamCard team={team} key={team.id} />)
+          teams.map((team: Team) => <TeamCard team={team} key={team._id} />)
         ) : (
           <p>No teams available</p>
         )}

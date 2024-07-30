@@ -1,4 +1,3 @@
-import { useLogout } from "@/lib/authUtils";
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 const apiClient = axios.create({
@@ -19,17 +18,13 @@ apiClient.interceptors.response.use(
     if (response?.status === 401) {
       try {
         // Call the refresh token endpoint
-        await axios.post(
-          "/api/auth/refresh-token",
-          {},
-          { withCredentials: true }
-        );
+        await apiClient.post("/auth/refresh-token");
 
         // Retry the original request with the same configuration
         return apiClient(config as AxiosRequestConfig);
       } catch (refreshError) {
-        const logout = useLogout();
-        logout();
+        // const logout = useLogout();
+        // logout();
         console.error("Refresh token failed:", refreshError);
       }
     }

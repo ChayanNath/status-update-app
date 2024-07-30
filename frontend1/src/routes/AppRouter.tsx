@@ -8,6 +8,7 @@ import PublicRoute from "./PublicRoute";
 import ProtectedRoute from "./ProtectedRoute";
 import Home from "@/pages/Home";
 import Layout from "@/components/layout/Layout";
+import TeamManagement from "@/pages/TeamManagement";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
         children: [
           { path: "", element: <Home /> },
           { path: "dashboard", element: <Dashboard /> },
+          { path: "manageTeam", element: <TeamManagement /> },
         ],
       },
     ],

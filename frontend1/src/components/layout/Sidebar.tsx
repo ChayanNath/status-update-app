@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 
 export function Sidebar() {
   const { isOpen } = useSidebar();
-  console.log(isOpen);
   return (
     <aside
       className={cn(
