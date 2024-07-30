@@ -12,6 +12,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+
+    // TODO: On refresh set the user back
   }, []);
 
   return (

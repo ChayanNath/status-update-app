@@ -1,3 +1,4 @@
+import { useLogout } from "@/lib/authUtils";
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 const apiClient = axios.create({
@@ -27,6 +28,8 @@ apiClient.interceptors.response.use(
         // Retry the original request with the same configuration
         return apiClient(config as AxiosRequestConfig);
       } catch (refreshError) {
+        const logout = useLogout();
+        logout();
         console.error("Refresh token failed:", refreshError);
       }
     }
