@@ -57,7 +57,7 @@ const LoginForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <CardHeader>
           <img src={RedLogo} className="h-10 w-10" />
-          <CardTitle className="text-xl">Sign in</CardTitle>
+          <CardTitle className="text-xl">Sign In</CardTitle>
           <CardDescription>to continue to Progress Tracker</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
