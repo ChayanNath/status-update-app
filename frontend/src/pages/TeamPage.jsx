@@ -29,6 +29,10 @@ const TeamPage = () => {
       }
     };
 
+    fetchTeams();
+  }, []);
+
+  useEffect(() => {
     const fetchUsers = async () => {
       try {
         const [users, allUsers] = await Promise.all([
@@ -42,9 +46,8 @@ const TeamPage = () => {
       }
     };
 
-    fetchTeams();
     fetchUsers();
-  }, []);
+  });
 
   const addTeamHandler = async (teamData) => {
     try {

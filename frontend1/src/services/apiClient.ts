@@ -25,7 +25,9 @@ apiClient.interceptors.response.use(
       } catch (refreshError) {
         // const logout = useLogout();
         // logout();
-        console.error("Refresh token failed:", refreshError);
+        localStorage.removeItem("user");
+        window.location.href = window.location.origin + "/login";
+        return Promise.reject(error);
       }
     }
 
