@@ -62,6 +62,9 @@ exports.logout = async (req, res) => {
 exports.refreshToken = async (req, res) => {
   try {
     const { refreshToken } = req.cookies;
+    if (!refreshToken) {
+      res.status(500).json({ message: "No refresh token" });
+    }
     const { newToken, newRefreshToken } = await authService.refreshToken(
       refreshToken
     );
@@ -76,6 +79,6 @@ exports.refreshToken = async (req, res) => {
       .cookie("refreshToken", newRefreshToken, cookieOptions)
       .json({ success: true });
   } catch (error) {
-    res.status(401).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
