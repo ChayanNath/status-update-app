@@ -1,13 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/features/auth/authSlice";
-import { getCookie } from "../utils/cookies";
 
 export const useAuth = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const userDetails = getCookie("userDetails");
+    const userDetails = localStorage.getItem("userDetails");
     if (userDetails) {
       try {
         const decodedUserDetails = decodeURIComponent(userDetails);

@@ -20,8 +20,8 @@ import {
   CardTitle,
 } from "../ui/card";
 import { toast } from "../ui/use-toast";
-import { Link } from "react-router-dom";
-import RedLogo from "../../assets/tasks-red.svg";
+import { Link, useNavigate } from "react-router-dom";
+import { register } from "@/services/authService";
 
 const formSchema = z
   .object({
@@ -47,6 +47,8 @@ const formSchema = z
   });
 
 const RegisterForm = () => {
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -58,22 +60,24 @@ const RegisterForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      ),
-    });
+  const onSubmit = async (
+    values: Omit<z.infer<typeof formSchema>, "confirmPassword">
+  ) => {
+    try {
+      await register(values);
+      navigate("/login");
+    } catch (error: unknown) {
+      toast({
+        title: "Registration failed",
+        description: (error as Error).message,
+      });
+    }
   };
 
   return (
     <Card className="w-[350px]">
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <CardHeader>
-          <img src={RedLogo} className="h-10 w-10" />
           <CardTitle className="text-xl">Create your account</CardTitle>
           <CardDescription>to continue to Progress Tracker</CardDescription>
         </CardHeader>
@@ -127,7 +131,11 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter password" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="Enter password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -140,7 +148,11 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Confirm password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter password" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="Enter password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

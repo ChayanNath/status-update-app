@@ -9,7 +9,9 @@ exports.register = async (req, res) => {
       username,
       password
     );
-    res.json(user);
+    res
+      .status(200)
+      .json({ message: "Registered successfully! Please login to continue." });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -18,18 +20,21 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { username, password } = req.body;
-    const { payload, token } = await authService.login(username, password);
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "Strict",
-    });
-    res.cookie("userDetails", JSON.stringify(payload), {
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
-    });
+    const { payload, token, refreshToken } = await authService.login(
+      username,
+      password
+    );
 
-    res.json(payload);
+    const cookieOptions = {
+      httpOnly: true,
+      secure: true,
+      sameSite: "Strict",
+    };
+    res
+      .status(200)
+      .cookie("token", token, cookieOptions)
+      .cookie("refreshToken", refreshToken, cookieOptions)
+      .json(payload);
   } catch (error) {
     res.status(401).json({ message: error.message });
   }
@@ -37,21 +42,40 @@ exports.login = async (req, res) => {
 
 exports.logout = async (req, res) => {
   try {
+    const userId = req.user._id; // Assuming req.user is set by your authentication middleware
+
+    await authService.logout(userId);
+
     res.cookie("token", "", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Secure cookie only in production
+      secure: true,
       sameSite: "Strict",
-      expires: new Date(0), // Expire the cookie immediately
-    });
-
-    res.cookie("userDetails", "", {
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
-      expires: new Date(0), // Expire the cookie immediately
+      expires: new Date(0),
     });
 
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+exports.refreshToken = async (req, res) => {
+  try {
+    const { refreshToken } = req.cookies;
+    const { newToken, newRefreshToken } = await authService.refreshToken(
+      refreshToken
+    );
+    const cookieOptions = {
+      httpOnly: true,
+      secure: true,
+      sameSite: "Strict",
+    };
+    res
+      .status(200)
+      .cookie("token", newToken, cookieOptions)
+      .cookie("refreshToken", newRefreshToken, cookieOptions)
+      .json({ success: true });
+  } catch (error) {
+    res.status(401).json({ message: error.message });
   }
 };

@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema({
   isAdmin: { type: Boolean, default: false },
   isSuperUser: { type: Boolean, default: false },
   fineAmount: { type: Number, default: 0 },
+  refreshToken: { type: String, default: null },
 });
 
 module.exports = mongoose.model("User", UserSchema);
