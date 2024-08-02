@@ -19,15 +19,15 @@ const TeamManagement = () => {
     fetchTeams();
   }, []);
 
-  const adminCardClickHandler = (id: string) => {
-    console.log(id);
+  const adminCardClickHandler = (team: Team) => {
+    console.log(team);
   };
 
   return (
     <>
       <div className="grid grid-cols-3 gap-4 h-full">
         <div className="">
-          <h1 className="text-2xl mb-3">All Teams</h1>
+          <h1 className="text-2xl mb-3">Teams</h1>
           <div className="flex flex-wrap gap-3 flex-col">
             {teams && teams.length > 0 ? (
               teams.map((team: Team) => (

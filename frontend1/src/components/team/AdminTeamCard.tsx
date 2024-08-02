@@ -10,14 +10,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface TeamCardProps {
   team: Team;
-  onClickHandler: (id: string) => void;
+  onClickHandler: (id: Team) => void;
 }
 
 const AdminTeamCard: React.FC<TeamCardProps> = ({ team, onClickHandler }) => {
   return (
     <Card
       className="w-[300px] cursor-pointer hover:bg-accent"
-      onClick={() => onClickHandler(team._id)}
+      onClick={() => onClickHandler(team)}
     >
       <CardHeader>
         <div className="flex items-center justify-items-center gap-3">
