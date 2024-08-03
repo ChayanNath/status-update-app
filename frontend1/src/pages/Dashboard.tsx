@@ -5,7 +5,7 @@ import { getTeams } from "@/services/teamService";
 import { getUserUpdates } from "@/services/userService";
 
 import { Team, Members } from "@/types/team";
-import { UserUpdate } from "@/types/user";
+import { DateRange, UserUpdate } from "@/types/user";
 import { useState, useEffect } from "react";
 
 const Dashboard = () => {
@@ -50,7 +50,14 @@ const Dashboard = () => {
   const userClickHandler = async (user: Members) => {
     setSelectedUser(user);
     try {
-      const updatesResponse = await getUserUpdates(user.id);
+      const to = new Date();
+      const from = new Date();
+      from.setDate(from.getDate() - 7);
+      const ranges = {
+        from,
+        to,
+      };
+      const updatesResponse = await getUserUpdates(user.id, ranges);
       setUserUpdates(updatesResponse);
     } catch (error) {
       console.error("Error fetching user updates:", error);
@@ -60,6 +67,23 @@ const Dashboard = () => {
   const onBackClickHandler = async () => {
     setSelectedTeam(null);
     setSelectedUser(null);
+  };
+
+  const dateUpdateHandler = async (values: {
+    range: DateRange;
+    rangeCompare?: DateRange;
+  }) => {
+    if (selectedUser) {
+      try {
+        const updatesResponse = await getUserUpdates(
+          selectedUser.id,
+          values.range
+        );
+        setUserUpdates(updatesResponse);
+      } catch (error) {
+        console.error("Error fetching user updates:", error);
+      }
+    }
   };
 
   return (
@@ -89,7 +113,13 @@ const Dashboard = () => {
             onUserClick={userClickHandler}
             onBackClick={onBackClickHandler}
           />
-          {selectedUser && <UserUpdates updates={userUpdates} />}
+          {selectedUser && (
+            <UserUpdates
+              user={selectedUser}
+              updates={userUpdates}
+              handleDateUpdate={dateUpdateHandler}
+            />
+          )}
         </div>
       )}
     </>

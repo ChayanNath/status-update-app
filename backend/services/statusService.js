@@ -49,6 +49,26 @@ exports.exportStatuses = async (startDate, endDate, teamId) => {
   return buffer;
 };
 
+const getDayOfWeek = (date) => {
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  return daysOfWeek[date.getDay()];
+};
+
+const formatDate = (date) => {
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
 exports.getUserUpdates = async (userId, startDate, endDate) => {
   try {
     const query = {
@@ -66,7 +86,16 @@ exports.getUserUpdates = async (userId, startDate, endDate) => {
         select: "firstName lastName",
       });
 
-    return userUpdates;
+    const userUpdatesWithDay = userUpdates.map((update) => {
+      const date = new Date(update.date);
+      return {
+        ...update.toObject(),
+        date: formatDate(date),
+        day: getDayOfWeek(date),
+      };
+    });
+
+    return userUpdatesWithDay;
   } catch (error) {
     console.error("Error fetching user updates:", error);
     throw new Error("Error fetching user updates");

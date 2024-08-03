@@ -72,7 +72,6 @@ exports.getStatuses = async (req, res) => {
 exports.getUserUpdates = async (req, res) => {
   try {
     const { startDate, endDate, userId } = req.query;
-
     // Validate query parameters
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });

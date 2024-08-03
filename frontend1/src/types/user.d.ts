@@ -18,4 +18,11 @@ export interface UserUpdate {
   _id: string;
   title: string;
   description: string;
+  date: string;
+  day: string;
+}
+
+export interface DateRange {
+  from: Date;
+  to: Date | undefined;
 }

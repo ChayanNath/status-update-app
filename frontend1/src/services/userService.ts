@@ -1,3 +1,4 @@
+import { DateRange } from "@/types/user";
 import apiClient from "./apiClient";
 
 export const fetchUserWithIds = async (userIds: string[]) => {
@@ -7,16 +8,13 @@ export const fetchUserWithIds = async (userIds: string[]) => {
   return response.data;
 };
 
-export const getUserUpdates = async (
-  userId: string,
-  dateRange?: { startDate: Date; endDate: Date }
-) => {
+export const getUserUpdates = async (userId: string, dateRange?: DateRange) => {
   // Convert dateRange to ISO string if provided, otherwise use defaults
-  const startDate = dateRange?.startDate
-    ? new Date(dateRange.startDate).toISOString()
+  const startDate = dateRange?.from
+    ? new Date(dateRange.from).toISOString()
     : undefined;
-  const endDate = dateRange?.endDate
-    ? new Date(dateRange.endDate).toISOString()
+  const endDate = dateRange?.to
+    ? new Date(dateRange.to).toISOString()
     : undefined;
 
   // Construct query parameters
