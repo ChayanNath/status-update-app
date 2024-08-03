@@ -9,4 +9,6 @@ router.get("/all", userController.getAllUsers);
 
 router.post("/add-fine", userController.addFine);
 
+router.post("/users-with-ids", userController.getUsers);
+
 module.exports = router;

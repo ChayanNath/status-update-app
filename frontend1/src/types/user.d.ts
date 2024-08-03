@@ -11,4 +11,11 @@ export interface User {
   lastName: string;
   isAdmin: boolean;
   team: string;
+  image?: string;
+}
+
+export interface UserUpdate {
+  _id: string;
+  title: string;
+  description: string;
 }

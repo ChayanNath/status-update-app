@@ -69,6 +69,39 @@ exports.getStatuses = async (req, res) => {
   }
 };
 
+exports.getUserUpdates = async (req, res) => {
+  try {
+    const { startDate, endDate, userId } = req.query;
+
+    // Validate query parameters
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    // Set default dates if not provided
+    const now = new Date();
+    const endOfToday = now.toISOString();
+    let startOfRange = new Date(now.setDate(now.getDate() - 30)).toISOString(); // Default to last 30 days if startDate is not provided
+
+    if (startDate) {
+      startOfRange = new Date(startDate).toISOString();
+    }
+
+    const endDateRange = endDate ? new Date(endDate).toISOString() : endOfToday;
+
+    // Fetch user updates for the specified date range
+    const userUpdates = await statusService.getUserUpdates(
+      userId,
+      startOfRange,
+      endDateRange
+    );
+
+    res.json(userUpdates);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 exports.exportStatuses = async (req, res) => {
   try {
     const { startDate, endDate, teamId } = req.query;

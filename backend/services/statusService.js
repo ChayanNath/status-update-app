@@ -48,3 +48,27 @@ exports.exportStatuses = async (startDate, endDate, teamId) => {
   const buffer = await excelExporter(statuses);
   return buffer;
 };
+
+exports.getUserUpdates = async (userId, startDate, endDate) => {
+  try {
+    const query = {
+      user: userId,
+      date: {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate),
+      },
+    };
+
+    const userUpdates = await Status.find(query)
+      .select("title description date")
+      .populate({
+        path: "user",
+        select: "firstName lastName",
+      });
+
+    return userUpdates;
+  } catch (error) {
+    console.error("Error fetching user updates:", error);
+    throw new Error("Error fetching user updates");
+  }
+};

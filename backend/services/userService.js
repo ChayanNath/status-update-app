@@ -24,6 +24,23 @@ exports.getAllUsers = async () => {
   }
 };
 
+exports.getUsers = async (userIds) => {
+  try {
+    const users = await User.find({
+      _id: { $in: userIds },
+    }).select("firstName lastName");
+
+    const transformedUsers = users.map((user) => ({
+      id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    }));
+    return transformedUsers;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 exports.addFine = async (userId, statusId, fine = 10) => {
   try {
     const user = await User.findById(userId);

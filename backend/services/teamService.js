@@ -161,8 +161,18 @@ exports.grantAdmin = async (userId) => {
 
 exports.getTeams = async () => {
   try {
-    const teams = await Team.find();
-    return teams;
+    const teams = await Team.find().populate("members", "firstName lastName");
+
+    // Format the members for each team
+    const teamsWithFormattedMembers = teams.map((team) => ({
+      ...team._doc,
+      members: team.members.map((member) => ({
+        id: member._id,
+        name: `${member.firstName} ${member.lastName}`,
+      })),
+    }));
+
+    return teamsWithFormattedMembers;
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

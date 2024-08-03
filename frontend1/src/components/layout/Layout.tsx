@@ -1,26 +1,27 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Outlet } from "react-router-dom";
-import { Sidebar } from "./Sidebar";
-import { Navbar } from "./Navbar";
-import useSidebar from "@/hooks/useSidebar";
+import { AppSidebar } from "./AppSidebar";
+import { ModeToggle } from "../mode-toggle";
 
 const Layout: React.FC = () => {
-  const { isOpen } = useSidebar();
-
   return (
     <>
-      <Sidebar />
-      <div className="flex flex-col flex-1">
-        <Navbar />
-        <main
-          className={cn(
-            "min-h-[calc(100vh_-_56px)] bg-zinc-50 dark:bg-zinc-900 transition-[margin-left] ease-in-out duration-300 p-4",
-            isOpen === false ? "lg:ml-[90px]" : "lg:ml-72"
-          )}
-        >
-          <Outlet />
-        </main>
+      <div
+        className={cn(
+          "rounded-md flex flex-col md:flex-row bg-gray-100 dark:bg-neutral-800 w-full flex-1 max-w-full mx-auto border border-neutral-200 dark:border-neutral-700 overflow-hidden",
+          "h-screen"
+        )}
+      >
+        <AppSidebar />
+        <div className="flex flex-1">
+          <div className="p-2 md:pb-10 md:pl-10 rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 w-full h-full">
+            <div className="flex justify-end">
+              <ModeToggle />
+            </div>
+            <Outlet />
+          </div>
+        </div>
       </div>
     </>
   );

@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface TeamCardProps {
   team: Team;
-  onClickHandler: (id: Team) => void;
+  onClickHandler: (team: Team) => void;
 }
 
 const AdminTeamCard: React.FC<TeamCardProps> = ({ team, onClickHandler }) => {

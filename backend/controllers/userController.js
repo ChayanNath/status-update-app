@@ -39,3 +39,16 @@ exports.addFine = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+exports.getUsers = async (req, res) => {
+  try {
+    const { users } = req.body;
+    if (!users && !users.length) {
+      res.status(400).json("No user id provided");
+    }
+    const result = await userService.getUsers(users);
+    res.json(result);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};

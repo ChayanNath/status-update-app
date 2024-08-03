@@ -1,10 +1,13 @@
 import AdminTeamCard from "@/components/team/AdminTeamCard";
 import { getTeams } from "@/services/teamService";
+import { fetchUserWithIds } from "@/services/userService";
 import { Team } from "@/types/team";
+import { User } from "@/types/user";
 import { useEffect, useState } from "react";
 
 const TeamManagement = () => {
   const [teams, setTeams] = useState([]);
+  const [selectedTeamDetails, setSelectedTeamDetails] = useState([]);
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -19,8 +22,13 @@ const TeamManagement = () => {
     fetchTeams();
   }, []);
 
-  const adminCardClickHandler = (team: Team) => {
-    console.log(team);
+  const adminCardClickHandler = async (team: Team) => {
+    try {
+      const response = await fetchUserWithIds(team.members);
+      setSelectedTeamDetails(response);
+    } catch (error) {
+      console.error("Error fetching user details", error);
+    }
   };
 
   return (
@@ -44,6 +52,13 @@ const TeamManagement = () => {
         </div>
         <div className="">
           <h1 className="text-2xl">Team Details</h1>
+          {selectedTeamDetails && selectedTeamDetails.length > 0 ? (
+            selectedTeamDetails.map((user: User) => (
+              <div key={user.id}>{user.firstName}</div>
+            ))
+          ) : (
+            <p>Select a team to view details</p>
+          )}
         </div>
         <div className="">
           <h1 className="text-2xl">Add Team</h1>

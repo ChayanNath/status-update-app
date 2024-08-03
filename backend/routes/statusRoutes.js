@@ -11,4 +11,6 @@ router.get("/get", statusController.getStatuses);
 // Route to export statuses to an Excel file
 router.get("/export", statusController.exportStatuses);
 
+router.get("/getUserUpdates", statusController.getUserUpdates);
+
 module.exports = router;
