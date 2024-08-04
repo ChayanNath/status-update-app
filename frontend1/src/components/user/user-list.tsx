@@ -30,14 +30,14 @@ const UserList: React.FC<UserListProps> = ({
   };
 
   return (
-    <div>
+    <div className="h-full flex flex-col">
       <div className="flex justify-between">
         <h2 className="text-lg mb-2">Team Members</h2>
         <Button variant="link" onClick={onBackClick}>
           <IconLeft></IconLeft> Back
         </Button>
       </div>
-      <ScrollArea className="h-full w-100 rounded-md border p-2">
+      <ScrollArea className="w-100 rounded-md border p-2 flex-1">
         <div className="flex flex-col gap-4">
           {users.map((user) => (
             <UserCard

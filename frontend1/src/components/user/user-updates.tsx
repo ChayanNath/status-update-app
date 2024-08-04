@@ -36,7 +36,7 @@ const UserUpdates: React.FC<UserUpdatesProps> = ({
       <h2 className="text-lg">
         Updates of <span className="text-">{user.name}</span>
       </h2>
-      <ScrollArea>
+      <ScrollArea className="h-full w-100 rounded-md border p-2">
         <ul className="flex flex-col gap-2">
           {updates.length > 0 ? (
             updates.map((update) => (

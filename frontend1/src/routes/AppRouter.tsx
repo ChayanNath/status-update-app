@@ -9,6 +9,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Home from "@/pages/Home";
 import Layout from "@/components/layout/Layout";
 import TeamManagement from "@/pages/TeamManagement";
+import StatusUpdate from "@/pages/StatusUpdate";
 
 const router = createBrowserRouter([
   {
@@ -31,7 +32,8 @@ const router = createBrowserRouter([
         children: [
           { path: "", element: <Home /> },
           { path: "dashboard", element: <Dashboard /> },
-          { path: "manageTeam", element: <TeamManagement /> },
+          { path: "update-status", element: <StatusUpdate /> },
+          { path: "team-management", element: <TeamManagement /> },
         ],
       },
     ],
