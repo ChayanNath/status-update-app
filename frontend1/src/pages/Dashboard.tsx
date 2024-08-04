@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [users, setUsers] = useState<Members[]>([]);
   const [selectedUser, setSelectedUser] = useState<Members | null>(null);
   const [userUpdates, setUserUpdates] = useState<UserUpdate[]>([]);
+  const [dateRange, setDateRange] = useState<DateRange | null>(null);
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -36,8 +37,16 @@ const Dashboard = () => {
       const firstUser = team.members[0];
       setSelectedUser(firstUser);
       try {
-        const updatesResponse = await getUserUpdates(firstUser.id);
+        const now = new Date();
+        const startOfWeek = getStartOfWeek(now);
+        const endOfWeek = getEndOfWeek(now);
+        const dateRange = {
+          from: startOfWeek,
+          to: endOfWeek,
+        };
+        const updatesResponse = await getUserUpdates(firstUser.id, dateRange);
         setUserUpdates(updatesResponse);
+        setDateRange(dateRange);
       } catch (error) {
         console.error("Error fetching user updates:", error);
       }
@@ -47,18 +56,37 @@ const Dashboard = () => {
     }
   };
 
+  const getStartOfWeek = (date: Date) => {
+    const start = new Date(date);
+    const day = start.getDay();
+    const diff = day === 0 ? 6 : day - 1; // Adjust for Monday as the start of the week
+    start.setDate(start.getDate() - diff);
+    start.setHours(0, 0, 0, 0); // Set to start of the day
+    return start;
+  };
+
+  const getEndOfWeek = (date: Date) => {
+    const end = new Date(date);
+    const day = end.getDay();
+    const diff = day === 0 ? 6 : day - 1; // Adjust for Monday as the end of the week
+    end.setDate(end.getDate() + (6 - diff)); // Move to the end of the week
+    end.setHours(23, 59, 59, 999); // Set to end of the day
+    return end;
+  };
+
   const userClickHandler = async (user: Members) => {
     setSelectedUser(user);
     try {
-      const to = new Date();
-      const from = new Date();
-      from.setDate(from.getDate() - 7);
-      const ranges = {
-        from,
-        to,
+      const now = new Date();
+      const startOfWeek = getStartOfWeek(now);
+      const endOfWeek = getEndOfWeek(now);
+      const dateRange = {
+        from: startOfWeek,
+        to: endOfWeek,
       };
-      const updatesResponse = await getUserUpdates(user.id, ranges);
+      const updatesResponse = await getUserUpdates(user.id, dateRange);
       setUserUpdates(updatesResponse);
+      setDateRange(dateRange);
     } catch (error) {
       console.error("Error fetching user updates:", error);
     }
@@ -115,8 +143,10 @@ const Dashboard = () => {
           />
           {selectedUser && (
             <UserUpdates
+              key={selectedUser.id}
               user={selectedUser}
               updates={userUpdates}
+              initialDateRange={dateRange}
               handleDateUpdate={dateUpdateHandler}
             />
           )}

@@ -63,22 +63,27 @@ exports.refreshToken = async (req, res) => {
   try {
     const { refreshToken } = req.cookies;
     if (!refreshToken) {
-      res.status(500).json({ message: "No refresh token" });
+      return res.status(500).json({ message: "No refresh token" });
     }
+
     const { newToken, newRefreshToken } = await authService.refreshToken(
       refreshToken
     );
+
     const cookieOptions = {
       httpOnly: true,
       secure: true,
       sameSite: "Strict",
     };
+
     res
       .status(200)
       .cookie("token", newToken, cookieOptions)
       .cookie("refreshToken", newRefreshToken, cookieOptions)
       .json({ success: true });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (!res.headersSent) {
+      res.status(500).json({ message: error.message });
+    }
   }
 };
