@@ -1,4 +1,4 @@
-import { Team } from "@/types/team";
+import { AddTeam } from "@/types/team";
 import apiClient from "./apiClient";
 
 export const getTeams = async () => {
@@ -6,7 +6,7 @@ export const getTeams = async () => {
   return response.data;
 };
 
-export const addTeam = async (values: Team) => {
+export const addTeam = async (values: AddTeam) => {
   const response = await apiClient.post("/team/create", values);
   return response.data;
 };
@@ -16,7 +16,7 @@ export const deleteTeam = async (teamId: string) => {
   return response.data;
 };
 
-export const updateTeam = async (teamId: string, teamData: Team) => {
+export const updateTeam = async (teamId: string, teamData: AddTeam) => {
   const response = await apiClient.put(`/team/${teamId}`, teamData);
   return response.data;
 };

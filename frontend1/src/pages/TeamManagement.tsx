@@ -2,12 +2,14 @@ import AdminTeamCard from "@/components/team/AdminTeamCard";
 import { getTeams } from "@/services/teamService";
 import { fetchUserWithIds } from "@/services/userService";
 import { Team } from "@/types/team";
-import { User } from "@/types/user";
 import { useEffect, useState } from "react";
+import TeamDetailsPage from "./TeamDetailsPage";
+import TeamForm from "@/components/team/TeamForm";
 
 const TeamManagement = () => {
   const [teams, setTeams] = useState([]);
-  const [selectedTeamDetails, setSelectedTeamDetails] = useState([]);
+  const [selectedTeamUsers, selectedTeamUserDetails] = useState([]);
+  const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -24,8 +26,10 @@ const TeamManagement = () => {
 
   const adminCardClickHandler = async (team: Team) => {
     try {
-      const response = await fetchUserWithIds(team.members);
-      setSelectedTeamDetails(response);
+      setSelectedTeam(team);
+      const extractedIds = team.members.map((user) => user.id);
+      const response = await fetchUserWithIds(extractedIds);
+      selectedTeamUserDetails(response);
     } catch (error) {
       console.error("Error fetching user details", error);
     }
@@ -33,9 +37,11 @@ const TeamManagement = () => {
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-4 h-full">
-        <div className="">
-          <h1 className="text-2xl mb-3">Teams</h1>
+      <div className="grid grid-cols-4 gap-3 h-full">
+        <div className="col-span-1">
+          <div className="mb-3">
+            <h1 className="text-2xl">Teams</h1>
+          </div>
           <div className="flex flex-wrap gap-3 flex-col">
             {teams && teams.length > 0 ? (
               teams.map((team: Team) => (
@@ -50,18 +56,19 @@ const TeamManagement = () => {
             )}
           </div>
         </div>
-        <div className="">
-          <h1 className="text-2xl">Team Details</h1>
-          {selectedTeamDetails && selectedTeamDetails.length > 0 ? (
-            selectedTeamDetails.map((user: User) => (
-              <div key={user.id}>{user.firstName}</div>
-            ))
+        <div className="col-span-3">
+          <div className="flex justify-between mb-2">
+            <h1 className="text-2xl">Team Details</h1>
+            <div>
+              <TeamForm team={null} />
+              {selectedTeam && <TeamForm team={selectedTeam} />}
+            </div>
+          </div>
+          {selectedTeamUsers && selectedTeamUsers.length > 0 ? (
+            <TeamDetailsPage users={selectedTeamUsers} team={selectedTeam} />
           ) : (
             <p>Select a team to view details</p>
           )}
-        </div>
-        <div className="">
-          <h1 className="text-2xl">Add Team</h1>
         </div>
       </div>
     </>

@@ -10,3 +10,9 @@ export interface Team {
   description: string;
   members: Members[];
 }
+
+export interface AddTeam {
+  name: string;
+  description: string;
+  members: string[];
+}
