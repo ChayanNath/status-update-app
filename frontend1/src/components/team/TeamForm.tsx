@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,19 +22,18 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Team } from "@/types/team";
+import { Members, Team } from "@/types/team";
 import {
   Select,
   SelectItem,
   SelectTrigger,
   SelectValue,
   SelectContent,
-  SelectGroup,
-  SelectLabel,
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
 import { addTeam, updateTeam } from "@/services/teamService";
 import { useNavigate } from "react-router-dom";
+import { getUsersWithoutTeam } from "@/services/userService";
 
 const formSchema = z.object({
   name: z
@@ -52,6 +52,8 @@ interface TeamFormProps {
 }
 
 const TeamForm: React.FC<TeamFormProps> = ({ team }) => {
+  const [usersWithoutTeam, setUsersWithoutTeam] = useState<Members[]>([]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -62,6 +64,23 @@ const TeamForm: React.FC<TeamFormProps> = ({ team }) => {
   });
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const users = await getUsersWithoutTeam();
+        setUsersWithoutTeam(users);
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to fetch users",
+          variant: "destructive",
+        });
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -80,7 +99,7 @@ const TeamForm: React.FC<TeamFormProps> = ({ team }) => {
           variant: "default",
         });
       }
-      navigate("/teams"); // Redirect to teams page
+      navigate("/teams");
     } catch (error) {
       toast({
         title: "Error",
@@ -136,6 +155,7 @@ const TeamForm: React.FC<TeamFormProps> = ({ team }) => {
                   </FormItem>
                 )}
               />
+              {/* TODO: Fix the field to be a multiselect */}
               <FormField
                 control={form.control}
                 name="members"
@@ -151,14 +171,11 @@ const TeamForm: React.FC<TeamFormProps> = ({ team }) => {
                           />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Fruits</SelectLabel>
-                            <SelectItem value="apple">Apple</SelectItem>
-                            <SelectItem value="banana">Banana</SelectItem>
-                            <SelectItem value="blueberry">Blueberry</SelectItem>
-                            <SelectItem value="grapes">Grapes</SelectItem>
-                            <SelectItem value="pineapple">Pineapple</SelectItem>
-                          </SelectGroup>
+                          {usersWithoutTeam.map((user) => (
+                            <SelectItem key={user.id} value={user.id}>
+                              {user.name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </FormControl>

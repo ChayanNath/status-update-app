@@ -30,3 +30,8 @@ export const getUserUpdates = async (userId: string, dateRange?: DateRange) => {
   );
   return response.data;
 };
+
+export const getUsersWithoutTeam = async () => {
+  const response = await apiClient.get("/users/without-team");
+  return response.data;
+};

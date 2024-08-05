@@ -57,7 +57,7 @@ const TeamDetailsPage: React.FC<TeamDetailsProps> = ({ team, users }) => {
                               {user.firstName + " " + user.lastName}
                             </AvatarFallback>
                           </Avatar>
-                          <h3>{user.firstName + " " + user.lastName}</h3>
+                          <p>{user.firstName + " " + user.lastName}</p>
                         </CardTitle>
                       </CardHeader>
                     </Card>
