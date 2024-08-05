@@ -3,20 +3,21 @@ const User = require("../models/User");
 const Team = require("../models/Team");
 const excelExporter = require("../utils/excelExporter");
 
-exports.addStatus = async (title, description, userId, teamId) => {
-  const user = await User.findById(userId);
+exports.addStatus = async (title, description, userId, date) => {
+  const user = await User.findById(userId).populate("team");
   if (!user) {
     throw new Error("User not found");
   }
 
-  let team = null;
-  if (teamId) {
-    team = await Team.findById(teamId);
-    if (!team) {
-      throw new Error("Team not found");
-    }
-  }
-  const status = new Status({ title, description, user, team });
+  const team = user.team || null;
+
+  const status = new Status({
+    title,
+    description,
+    user: user._id,
+    team: team ? team._id : null,
+    date,
+  });
   await status.save();
   return status;
 };

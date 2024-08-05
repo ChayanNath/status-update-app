@@ -2,14 +2,16 @@ const statusService = require("../services/statusService");
 
 exports.addStatus = async (req, res) => {
   try {
-    const { title, description, teamId } = req.body;
+    const { title, description, date } = req.body;
     const userId = req.user._id;
+
     const status = await statusService.addStatus(
       title,
       description,
       userId,
-      teamId
+      date
     );
+
     res.json(status);
   } catch (error) {
     res.status(400).json({ message: error.message });
