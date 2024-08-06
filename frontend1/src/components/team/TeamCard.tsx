@@ -18,7 +18,7 @@ interface TeamCardProps {
 const TeamCard: React.FC<TeamCardProps> = ({ team, onClickHandler }) => {
   return (
     <Card
-      className="w-full cursor-pointer hover:bg-accent"
+      className="w-300px cursor-pointer hover:bg-accent"
       onClick={() => onClickHandler(team)}
     >
       <CardHeader>
