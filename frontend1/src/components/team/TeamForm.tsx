@@ -23,17 +23,10 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Members, Team } from "@/types/team";
-import {
-  Select,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-} from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
 import { addTeam, updateTeam } from "@/services/teamService";
-import { useNavigate } from "react-router-dom";
 import { getUsersWithoutTeam } from "@/services/userService";
+import { MultiSelect } from "@/components/ui/multi-select";
 
 const formSchema = z.object({
   name: z
@@ -62,8 +55,6 @@ const TeamForm: React.FC<TeamFormProps> = ({ team }) => {
       members: team?.members.map((member) => member.id) || [],
     },
   });
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -99,7 +90,6 @@ const TeamForm: React.FC<TeamFormProps> = ({ team }) => {
           variant: "default",
         });
       }
-      navigate("/teams");
     } catch (error) {
       toast({
         title: "Error",
@@ -155,7 +145,6 @@ const TeamForm: React.FC<TeamFormProps> = ({ team }) => {
                   </FormItem>
                 )}
               />
-              {/* TODO: Fix the field to be a multiselect */}
               <FormField
                 control={form.control}
                 name="members"
@@ -163,21 +152,17 @@ const TeamForm: React.FC<TeamFormProps> = ({ team }) => {
                   <FormItem>
                     <FormLabel>Team Members</FormLabel>
                     <FormControl>
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue
-                            placeholder="Select team members"
-                            {...field}
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {usersWithoutTeam.map((user) => (
-                            <SelectItem key={user.id} value={user.id}>
-                              {user.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <MultiSelect
+                        options={usersWithoutTeam.map((user) => ({
+                          id: user.id,
+                          name: user.name,
+                        }))}
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        placeholder="Select team members"
+                        variant="default"
+                        maxCount={5}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -185,7 +170,6 @@ const TeamForm: React.FC<TeamFormProps> = ({ team }) => {
               />
             </Form>
           </div>
-
           <SheetFooter>
             <SheetClose asChild>
               <Button type="submit">

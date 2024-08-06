@@ -4,8 +4,8 @@ const teamService = require("../services/teamService");
 
 exports.createTeam = async (req, res) => {
   try {
-    const { name, teamMembers, description } = req.body;
-    const team = await teamService.createTeam(name, teamMembers, description);
+    const { name, members, description } = req.body;
+    const team = await teamService.createTeam(name, members, description);
     res.json(team);
   } catch (error) {
     res.status(400).json({ message: error.message });

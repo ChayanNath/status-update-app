@@ -7,7 +7,7 @@ exports.createTeam = async (name, teamMembers, description) => {
   session.startTransaction();
   try {
     // Create the team
-    const team = new Team({ name });
+    const team = new Team({ name, description });
     await team.save({ session });
 
     if (teamMembers && teamMembers.length > 0) {
@@ -20,13 +20,12 @@ exports.createTeam = async (name, teamMembers, description) => {
 
       // Add members to team
       team.members = teamMembers;
-      team.description = description;
       await team.save({ session });
     }
 
     // Query the team again to populate it
     const populatedTeam = await Team.findById(team._id)
-      .populate("members", "_id", "description") // Only populate the _id field
+      .populate("members", "firstName lastName") // Populate firstName and lastName of User
       .session(session)
       .select("name members description"); // Select only the name and members fields
 
@@ -54,11 +53,15 @@ exports.updateTeam = async (teamId, name, teamMembers, description) => {
       team.name = name;
     }
 
+    if (description) {
+      team.description = description;
+    }
+
     if (teamMembers && teamMembers.length > 0) {
       // Remove current team members
       await User.updateMany(
         { team: team._id },
-        { $unset: { team: 1 } },
+        { $unset: { team: "" } },
         { session }
       );
 
@@ -71,13 +74,12 @@ exports.updateTeam = async (teamId, name, teamMembers, description) => {
 
       // Update the team's members field
       team.members = teamMembers;
-      team.description = description;
     }
 
     await team.save({ session });
 
     const populatedTeam = await Team.findById(team._id)
-      .populate("members", "_id", "description") // Only populate _id field
+      .populate("members", "firstName lastName") // Populate firstName and lastName of User
       .session(session);
 
     await session.commitTransaction();
@@ -131,18 +133,23 @@ exports.addMember = async (teamId, userId) => {
   if (!user) {
     throw new Error("User not found");
   }
-  team.members.push(user);
+
+  // Add user ID to team members
+  team.members.push(user._id);
   await team.save();
-  user.team = team;
+
+  // Update user's team reference
+  user.team = team._id;
   await user.save();
+
   return team;
 };
 
-// function for granting admin privileges
+// Function for granting admin privileges
 exports.grantAdmin = async (userId) => {
   try {
     if (!userId) {
-      throw new Error("User id is not available");
+      throw new Error("User ID is not available");
     }
 
     const user = await User.findById(userId);
@@ -155,7 +162,7 @@ exports.grantAdmin = async (userId) => {
 
     return user;
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    throw error;
   }
 };
 
@@ -174,6 +181,6 @@ exports.getTeams = async () => {
 
     return teamsWithFormattedMembers;
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    throw error;
   }
 };
