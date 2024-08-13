@@ -1,3 +1,4 @@
+import { Export } from "@/components/team/Export";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Team } from "@/types/team";
@@ -15,6 +16,7 @@ const TeamDetailsPage: React.FC<TeamDetailsProps> = ({ team, users }) => {
       <Card className="w-full">
         <CardHeader>
           <CardTitle className="text-xl">Team Details</CardTitle>
+          {team && <Export teamId={team._id} />}
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -6,40 +6,32 @@ const passport = require("passport");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 
-// Load environment variables from .env file
 dotenv.config();
 
-// Import routes
 const authRoutes = require("./routes/authRoutes");
 const teamRoutes = require("./routes/teamRoutes");
 const statusRoutes = require("./routes/statusRoutes");
 const userRoutes = require("./routes/userRoutes");
 
-// Import database configuration
 const connectDB = require("./config/db");
 
-// Initialize express app
 const app = express();
 
-// Connect to MongoDB
 connectDB();
 
-// Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser()); // Add cookie-parser middleware
+app.use(cookieParser());
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173", // Adjust to your frontend URL
-    credentials: true, // Allow cookies to be sent
+    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
+    credentials: true,
   })
 );
 
-// Passport middleware
 app.use(passport.initialize());
 require("./config/passport")(passport); // Pass passport for configuration
 
-// Routes
 app.use("/api/auth", authRoutes);
 app.use(
   "/api/team",

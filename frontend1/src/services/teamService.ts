@@ -20,3 +20,17 @@ export const updateTeam = async (teamId: string, teamData: AddTeam) => {
   const response = await apiClient.put(`/team/${teamId}`, teamData);
   return response.data;
 };
+
+export const exportStatuses = async (
+  startDate: string,
+  endDate: string,
+  teamId: string
+) => {
+  const response = await apiClient.get(
+    `/status/export?startDate=${startDate}&endDate=${endDate}&teamId=${teamId}`,
+    {
+      responseType: "blob",
+    }
+  );
+  return response.data;
+};

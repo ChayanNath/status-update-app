@@ -14,7 +14,7 @@ router.post("/addMember", adminMiddleware, teamController.addMember);
 
 router.delete("/:teamId", adminMiddleware, teamController.deleteTeam);
 
-router.get("/getallteams", adminMiddleware, teamController.getTeams);
+router.get("/getallteams", teamController.getTeams);
 
 router.put("/:teamId", adminMiddleware, teamController.updateTeam);
 

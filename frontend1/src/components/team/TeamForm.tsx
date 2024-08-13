@@ -27,6 +27,7 @@ import { toast } from "@/components/ui/use-toast";
 import { addTeam, updateTeam } from "@/services/teamService";
 import { getUsersWithoutTeam } from "@/services/userService";
 import { MultiSelect } from "@/components/ui/multi-select";
+import { AxiosError } from "axios";
 
 const formSchema = z.object({
   name: z
@@ -91,9 +92,14 @@ const TeamForm: React.FC<TeamFormProps> = ({ team }) => {
         });
       }
     } catch (error) {
+      const err = error as AxiosError;
+      const message =
+        err.response?.data?.message ||
+        err.message ||
+        "An unknown error occurred";
       toast({
         title: "Error",
-        description: "An error occurred while saving the team",
+        description: message,
         variant: "destructive",
       });
     }
