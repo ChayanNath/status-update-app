@@ -1,9 +1,7 @@
 const ExcelJS = require("exceljs");
 
-const excelExporter = async (statuses) => {
+const excelExporter = async (statuses, startDate, endDate) => {
   const workbook = new ExcelJS.Workbook();
-
-  // Group statuses by user
   const statusesByUser = statuses.reduce((acc, status) => {
     const fullName = `${status.user.firstName} ${status.user.lastName}`;
     if (!acc[fullName]) {
@@ -13,7 +11,18 @@ const excelExporter = async (statuses) => {
     return acc;
   }, {});
 
-  // Create a sheet for each user
+  let currentDate = new Date(startDate);
+  const localEndDate = new Date(endDate);
+
+  currentDate = new Date(currentDate.setHours(0, 0, 0, 0));
+  localEndDate.setHours(23, 59, 59, 999);
+
+  const allDates = [];
+
+  while (currentDate <= localEndDate) {
+    allDates.push(new Date(currentDate));
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
   Object.keys(statusesByUser).forEach((username) => {
     const sheet = workbook.addWorksheet(username);
     sheet.columns = [
@@ -22,16 +31,37 @@ const excelExporter = async (statuses) => {
       { header: "Description", key: "description", width: 50 },
     ];
 
-    statusesByUser[username].forEach((status) => {
-      sheet.addRow({
-        date: status.date.toLocaleDateString(), // Format the date
+    const statusByDate = statusesByUser[username].reduce((acc, status) => {
+      const dateKey = status.date.toISOString().split("T")[0];
+      acc[dateKey] = status;
+      return acc;
+    }, {});
+
+    allDates.forEach((date) => {
+      const dateKey = date.toISOString().split("T")[0];
+      const status = statusByDate[dateKey] || { title: "", description: "" };
+
+      const row = sheet.addRow({
+        date: date.toLocaleDateString(),
         title: status.title,
         description: status.description,
       });
+
+      // Mark weekends in grey
+      // TODO: Access all holidays and mark them also in different color
+      const dayOfWeek = date.getDay();
+      if (dayOfWeek === 6 || dayOfWeek === 0) {
+        row.eachCell((cell) => {
+          cell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: "D3D3D3" },
+          };
+        });
+      }
     });
   });
 
-  // Write the Excel file to buffer
   return workbook.xlsx.writeBuffer();
 };
 

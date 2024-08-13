@@ -46,7 +46,7 @@ exports.getStatuses = async (startDate, endDate, teamId) => {
 
 exports.exportStatuses = async (startDate, endDate, teamId) => {
   const statuses = await this.getStatuses(startDate, endDate, teamId);
-  const buffer = await excelExporter(statuses);
+  const buffer = await excelExporter(statuses, startDate, endDate);
   return buffer;
 };
 
