@@ -1,14 +1,15 @@
 const ExcelJS = require("exceljs");
 
-const excelExporter = (statuses) => {
+const excelExporter = async (statuses) => {
   const workbook = new ExcelJS.Workbook();
 
   // Group statuses by user
   const statusesByUser = statuses.reduce((acc, status) => {
-    if (!acc[status.user.username]) {
-      acc[status.user.username] = [];
+    const fullName = `${status.user.firstName} ${status.user.lastName}`;
+    if (!acc[fullName]) {
+      acc[fullName] = [];
     }
-    acc[status.user.username].push(status);
+    acc[fullName].push(status);
     return acc;
   }, {});
 
@@ -23,7 +24,7 @@ const excelExporter = (statuses) => {
 
     statusesByUser[username].forEach((status) => {
       sheet.addRow({
-        date: status.date,
+        date: status.date.toLocaleDateString(), // Format the date
         title: status.title,
         description: status.description,
       });

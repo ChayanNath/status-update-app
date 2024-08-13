@@ -15,8 +15,12 @@ const TeamDetailsPage: React.FC<TeamDetailsProps> = ({ team, users }) => {
     <div className="flex flex-col gap-3 h-full">
       <Card className="w-full">
         <CardHeader>
-          <CardTitle className="text-xl">Team Details</CardTitle>
-          {team && <Export teamId={team._id} />}
+          <CardTitle className="text-xl">
+            <div className="flex justify-between">
+              Team Details
+              {team && <Export teamId={team._id} />}
+            </div>
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
