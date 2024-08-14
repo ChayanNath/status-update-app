@@ -22,6 +22,13 @@ exports.addStatus = async (title, description, userId, date) => {
   return status;
 };
 
+exports.getTeamName = async (teamId) => {
+  if (!teamId) return null;
+
+  const team = await Team.findById(teamId).select("name");
+  return team ? team.name : "unknown-team";
+};
+
 exports.getStatuses = async (startDate, endDate, teamId) => {
   const query = {
     date: {
@@ -33,7 +40,6 @@ exports.getStatuses = async (startDate, endDate, teamId) => {
     query.team = teamId;
   }
 
-  // Select only the necessary fields from Status and populate user and team fields
   const statuses = await Status.find(query)
     .select("title description date user team")
     .populate({

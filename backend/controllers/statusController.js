@@ -111,13 +111,21 @@ exports.exportStatuses = async (req, res) => {
       endDate,
       teamId
     );
+
+    const teamName = await statusService.getTeamName(teamId);
+    const formattedTeamName = (teamName || "all-teams").replace(/\s+/g, "_");
+
+    const formattedStartDate = new Date(startDate).toISOString().split("T")[0];
+    const formattedEndDate = new Date(endDate).toISOString().split("T")[0];
+    const fileName = `status-updates-${formattedTeamName}-${formattedStartDate}-to-${formattedEndDate}.xlsx`;
+    const encodedFileName = encodeURIComponent(fileName);
     res.setHeader(
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     );
     res.setHeader(
       "Content-Disposition",
-      "attachment; filename=status-updates.xlsx"
+      `attachment; filename=${encodedFileName}`
     );
     res.send(buffer);
   } catch (error) {
