@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  mongo_db:
+    container_name: db_container
+    image: mongo:latest
+    restart: always
+    volumes:
+      - mongo_db:/data/db
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/app
+    ports:
+      - "5000:5000"
+    environment:
+      MONGO_URI: mongodb://mongo_db:27017/status-update-app
+      PORT: 5000
+      SECRET_KEY: 2a4fc233cc5e9aa99b9d092c391c4fdff3247646f4f355e8483df3a66a342511e63ff358ff0f135d9754b30ff6d51271c4941e149d28838469eb233c19f9553a
+      NODE_ENV: production
+      CLIENT_ORIGIN: http://localhost:3000
+    depends_on:
+      - mongo_db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+    depends_on:
+      - backend
+
+volumes:
+  mongo_db:

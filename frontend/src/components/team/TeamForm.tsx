@@ -92,10 +92,10 @@ const TeamForm: React.FC<TeamFormProps> = ({ team }) => {
         });
       }
     } catch (error) {
-      const err = error as AxiosError;
+      const axiosError = error as AxiosError<{ message?: string }>;
       const message =
-        err.response?.data?.message ||
-        err.message ||
+        axiosError.response?.data?.message ||
+        axiosError.message ||
         "An unknown error occurred";
       toast({
         title: "Error",
