@@ -96,3 +96,10 @@ exports.logout = async (userId) => {
   user.refreshToken = null;
   await user.save();
 };
+
+exports.makeAdmin = async (userId) => {
+  try {
+  } catch (error) {
+    res.status(500).json({ message: error.message || "Server error" });
+  }
+};

@@ -1,9 +1,12 @@
 FROM node:alpine
 WORKDIR /usr/src/app
-COPY package*.json .
 
+# Copy and install dependencies
+COPY package*.json ./
 RUN npm install
 
+# Copy application code
 COPY . .
 
-CMD ["npm", "start"]
+# Start the application
+CMD ["sh", "-c", "node scripts/createAdmin.js && npm start"]
