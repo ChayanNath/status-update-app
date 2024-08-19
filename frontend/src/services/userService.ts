@@ -38,3 +38,8 @@ export const makeAdmin = async (userId: string) => {
   const response = await apiClient.post("/users/make-admin", { userId });
   return response.data;
 };
+
+export const removeUser = async (userId: string) => {
+  const response = await apiClient.post("/users/remove-user", { userId });
+  return response.data;
+};

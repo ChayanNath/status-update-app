@@ -14,4 +14,6 @@ router.post("/users-with-ids", userController.getUsers);
 
 router.post("/make-admin", adminMiddleware, userController.makeAdmin);
 
+router.post("/remove-user", adminMiddleware, userController.removeUser);
+
 module.exports = router;

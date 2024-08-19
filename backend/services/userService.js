@@ -1,4 +1,6 @@
 const User = require("../models/User");
+const Status = require("../models/Status");
+const Team = require("../models/Team");
 
 exports.getUsersWithoutTeam = async () => {
   try {
@@ -18,6 +20,8 @@ exports.getAllUsers = async () => {
     return users.map((user) => ({
       label: `${user.firstName} ${user.lastName}`,
       value: user._id,
+      isAdmin: user.isAdmin,
+      isSuperUser: user.isSuperUser,
     }));
   } catch (error) {
     throw new Error("Error fetching users: " + error.message);
@@ -90,5 +94,20 @@ exports.makeAdmin = async (userId) => {
     return user;
   } catch (error) {
     throw new Error(error.message);
+  }
+};
+
+exports.removeUser = async (userId) => {
+  try {
+    await User.findByIdAndDelete(userId);
+
+    await Status.deleteMany({ user: userId });
+
+    await Team.updateMany({ members: userId }, { $pull: { members: userId } });
+
+    return { message: "User deleted successfully." };
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to remove user");
   }
 };

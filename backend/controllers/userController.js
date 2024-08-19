@@ -68,3 +68,16 @@ exports.makeAdmin = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+exports.removeUser = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(400).json({ message: "No user id provided" });
+    }
+    const result = await userService.removeUser(userId);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
