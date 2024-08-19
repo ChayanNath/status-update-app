@@ -17,14 +17,12 @@ export const getUserUpdates = async (userId: string, dateRange?: DateRange) => {
     ? new Date(dateRange.to).toISOString()
     : undefined;
 
-  // Construct query parameters
   const queryParams = new URLSearchParams({
     userId,
     ...(startDate && { startDate }),
     ...(endDate && { endDate }),
   });
 
-  // Make the GET request
   const response = await apiClient.get(
     `/status/getUserUpdates?${queryParams.toString()}`
   );
@@ -33,5 +31,10 @@ export const getUserUpdates = async (userId: string, dateRange?: DateRange) => {
 
 export const getUsersWithoutTeam = async () => {
   const response = await apiClient.get("/users/without-team");
+  return response.data;
+};
+
+export const makeAdmin = async (userId: string) => {
+  const response = await apiClient.post("/users/make-admin", { userId });
   return response.data;
 };

@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Team } from "@/types/team";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AnimatedTooltip } from "../ui/animated-tooltip";
 
 interface TeamCardProps {
@@ -23,13 +22,6 @@ const TeamCard: React.FC<TeamCardProps> = ({ team, onClickHandler }) => {
     >
       <CardHeader>
         <div className="flex items-center justify-items-center flex-col gap-3 mb-3">
-          <Avatar>
-            <AvatarImage
-              src={`https://api.dicebear.com/9.x/fun-emoji/svg?seed=${team.name}`}
-              alt="Team Image"
-            />
-            <AvatarFallback>{team.name}</AvatarFallback>
-          </Avatar>
           <CardTitle className="text-2xl">{team.name}</CardTitle>
         </div>
         <CardDescription>{team.description}</CardDescription>

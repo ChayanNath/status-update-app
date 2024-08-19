@@ -5,6 +5,7 @@ import {
   IconEdit,
   IconUsersGroup,
   IconLayoutDashboard,
+  IconUserBolt,
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,7 +18,7 @@ import { LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function AppSidebar() {
-  const links = [
+  const generalLinks = [
     {
       label: "Dashboard",
       href: "/dashboard",
@@ -32,6 +33,9 @@ export function AppSidebar() {
         <IconEdit className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
+  ];
+
+  const adminLinks = [
     {
       label: "Team Management",
       href: "/team-management",
@@ -39,7 +43,15 @@ export function AppSidebar() {
         <IconUsersGroup className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
+    {
+      label: "User Management",
+      href: "/user-management",
+      icon: (
+        <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
   ];
+
   const [open, setOpen] = useState(false);
 
   const { user, setUser } = useAuth();
@@ -53,24 +65,22 @@ export function AppSidebar() {
     navigate("/login");
   };
 
-  // const extractInitials = (
-  //   firstName: string | undefined,
-  //   lastName: string | undefined
-  // ) => {
-  //   const firstInitial = firstName ? firstName.substring(0, 1) : "";
-  //   const lastInitial = lastName ? lastName.substring(0, 1) : "";
-  //   return `${firstInitial}${lastInitial}`;
-  // };
-
   return (
     <Sidebar open={open} setOpen={setOpen}>
       <SidebarBody className="justify-between gap-10">
         <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
           {open ? <Logo /> : <LogoIcon />}
           <div className="mt-8 flex flex-col gap-2">
-            {links.map((link, idx) => (
+            {generalLinks.map((link, idx) => (
               <SidebarLink key={idx} link={link} />
             ))}
+            {user?.isAdmin && (
+              <>
+                {adminLinks.map((link, idx) => (
+                  <SidebarLink key={idx} link={link} />
+                ))}
+              </>
+            )}
           </div>
         </div>
         <div className="flex flex-col">
@@ -80,7 +90,7 @@ export function AppSidebar() {
               href: "#",
               icon: (
                 <img
-                  src={`https://api.dicebear.com/9.x/personas/svg?seed=${user?.firstName}`}
+                  src={`https://api.dicebear.com/9.x/personas/svg?seed=${user?.firstName} ${user?.lastName}`}
                   className="h-7 w-7 flex-shrink-0 rounded-full"
                   width={50}
                   height={50}
@@ -90,9 +100,7 @@ export function AppSidebar() {
             }}
           />
           <Button
-            onClick={() => {
-              handleLogout();
-            }}
+            onClick={handleLogout}
             variant="outline"
             className="w-full justify-center h-10 mt-5"
           >
@@ -113,6 +121,7 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
+
 export const Logo = () => {
   return (
     <Link
@@ -130,6 +139,7 @@ export const Logo = () => {
     </Link>
   );
 };
+
 export const LogoIcon = () => {
   return (
     <Link

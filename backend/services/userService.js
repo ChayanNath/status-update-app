@@ -69,3 +69,26 @@ exports.addFine = async (userId, statusId, fine = 10) => {
     throw new Error(error.message);
   }
 };
+
+exports.makeAdmin = async (userId) => {
+  try {
+    const user = await User.findById(userId).select(
+      "_id firstName lastName isAdmin"
+    );
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (user.isAdmin) {
+      throw new Error("User is already an admin!");
+    }
+
+    user.isAdmin = true;
+
+    await user.save();
+    return user;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
