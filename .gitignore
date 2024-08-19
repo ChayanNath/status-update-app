@@ -24,3 +24,6 @@ logs
 
 # Environment variables
 .env*
+
+# Docker compose
+docker-compose.yml
