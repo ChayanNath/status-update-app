@@ -63,3 +63,20 @@ exports.getTeams = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+exports.uploadHoliday = async (req, res) => {
+  try {
+    const file = req.file;
+
+    if (!file) {
+      return res.status(400).send("No file uploaded.");
+    }
+
+    const response = await teamService.uploadHoliday();
+
+    res.status(200).send("Holidays updated successfully.");
+  } catch (error) {
+    console.error("Error processing file:", error);
+    res.status(500).send("Error processing file.");
+  }
+};

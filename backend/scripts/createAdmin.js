@@ -25,6 +25,7 @@ const createAdminUser = async () => {
       firstName: "admin",
       lastName: "user",
       isAdmin: true,
+      isSuperUser: true,
     });
 
     await adminUser.save();

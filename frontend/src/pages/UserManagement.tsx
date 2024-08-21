@@ -74,7 +74,7 @@ const UserManagement = () => {
           <CardTitle className="text-xl">All Users</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <ScrollArea>
+          <ScrollArea className="h-[calc(100vh-206px)] w-full">
             {users && users.length > 0 ? (
               <ul className="flex flex-col gap-3">
                 {users.map((user) => (

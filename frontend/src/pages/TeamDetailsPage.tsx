@@ -16,8 +16,7 @@ const TeamDetailsPage: React.FC<TeamDetailsProps> = ({ team, users }) => {
       <Card className="w-full">
         <CardHeader>
           <CardTitle className="text-xl">
-            <div className="flex justify-between">
-              Team Details
+            <div className="flex justify-end">
               {team && <Export teamId={team._id} />}
             </div>
           </CardTitle>
@@ -42,7 +41,7 @@ const TeamDetailsPage: React.FC<TeamDetailsProps> = ({ team, users }) => {
           <CardTitle className="text-xl">Team Members</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <ScrollArea>
+          <ScrollArea className="w-full h-[calc(100vh-444px)]">
             {users && users.length > 0 ? (
               <ul className="flex flex-col gap-3">
                 {users.map((user) => (

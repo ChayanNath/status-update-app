@@ -1,5 +1,7 @@
 const Team = require("../models/Team");
 const User = require("../models/User");
+const ExcelJS = require("exceljs");
+const Holiday = require("../models/Holiday");
 const mongoose = require("mongoose");
 
 exports.createTeam = async (name, teamMembers, description) => {
@@ -180,6 +182,36 @@ exports.getTeams = async () => {
     }));
 
     return teamsWithFormattedMembers;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.uploadHoliday = async (file) => {
+  try {
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.readFile(file.path);
+
+    const worksheet = workbook.worksheets[0];
+
+    const holidays = [];
+
+    worksheet.eachRow((row, rowNumber) => {
+      if (rowNumber > 1) {
+        const date = row.getCell(1).value;
+        const name = row.getCell(2).value;
+
+        holidays.push({ date: new Date(date), name });
+      }
+    });
+
+    for (const holiday of holidays) {
+      await Holiday.updateOne(
+        { date: holiday.date },
+        { date: holiday.date, name: holiday.name },
+        { upsert: true }
+      );
+    }
   } catch (error) {
     throw error;
   }
