@@ -23,7 +23,7 @@ const AdminTeamCard: React.FC<TeamCardProps> = ({ team, onClickHandler }) => {
         <div className="flex items-center justify-items-center gap-3">
           <Avatar>
             <AvatarImage
-              src={`https://api.dicebear.com/9.x/fun-emoji/svg?seed=${team.name}`}
+              src={`https://api.dicebear.com/9.x/initials/svg?seed=${team.name}`}
               alt="Team Image"
             />
             <AvatarFallback>{team.name}</AvatarFallback>

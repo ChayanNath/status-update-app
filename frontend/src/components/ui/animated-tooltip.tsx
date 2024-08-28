@@ -77,7 +77,7 @@ export const AnimatedTooltip = ({ items }: { items: Members[] }) => {
             onMouseMove={handleMouseMove}
             src={
               item.image ||
-              `https://api.dicebear.com/9.x/personas/svg?seed=${encodeURIComponent(
+              `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
                 item.name
               )}&backgroundColor=d1d4f9,c0aede,b6e3f4,ffd5dc,ffdfbf`
             }

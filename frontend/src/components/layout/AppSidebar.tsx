@@ -90,7 +90,7 @@ export function AppSidebar() {
               href: "#",
               icon: (
                 <img
-                  src={`https://api.dicebear.com/9.x/personas/svg?seed=${user?.firstName} ${user?.lastName}`}
+                  src={`https://api.dicebear.com/9.x/initials/svg?seed=${user?.firstName} ${user?.lastName}`}
                   className="h-7 w-7 flex-shrink-0 rounded-full"
                   width={50}
                   height={50}

@@ -51,7 +51,7 @@ const TeamDetailsPage: React.FC<TeamDetailsProps> = ({ team, users }) => {
                         <CardTitle className="text-xl flex gap-3">
                           <Avatar>
                             <AvatarImage
-                              src={`https://api.dicebear.com/9.x/personas/svg?seed=${encodeURIComponent(
+                              src={`https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
                                 user.firstName + " " + user.lastName
                               )}&backgroundColor=d1d4f9,c0aede,b6e3f4,ffd5dc,ffdfbf`}
                               alt={`${

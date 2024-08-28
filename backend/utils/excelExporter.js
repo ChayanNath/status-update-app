@@ -23,6 +23,7 @@ const excelExporter = async (statuses, startDate, endDate) => {
     allDates.push(new Date(currentDate));
     currentDate.setDate(currentDate.getDate() + 1);
   }
+
   Object.keys(statusesByUser).forEach((username) => {
     const sheet = workbook.addWorksheet(username);
     sheet.columns = [
@@ -44,11 +45,13 @@ const excelExporter = async (statuses, startDate, endDate) => {
       const row = sheet.addRow({
         date: date.toLocaleDateString(),
         title: status.title,
-        description: status.description,
+        description: status.description.replace(/\n/g, "\r\n"),
       });
 
+      row.getCell('description').alignment = { wrapText: true };
+
       // Mark weekends in grey
-      // TODO: Access all holidays and mark them also in different color
+      // TODO: Access all holidays and mark them also in a different color
       const dayOfWeek = date.getDay();
       if (dayOfWeek === 6 || dayOfWeek === 0) {
         row.eachCell((cell) => {
@@ -64,5 +67,6 @@ const excelExporter = async (statuses, startDate, endDate) => {
 
   return workbook.xlsx.writeBuffer();
 };
+
 
 module.exports = excelExporter;

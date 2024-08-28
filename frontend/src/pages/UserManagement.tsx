@@ -85,7 +85,7 @@ const UserManagement = () => {
                           <div className="flex gap-3 items-center">
                             <Avatar>
                               <AvatarImage
-                                src={`https://api.dicebear.com/9.x/personas/svg?seed=${encodeURIComponent(
+                                src={`https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
                                   user.label
                                 )}&backgroundColor=d1d4f9,c0aede,b6e3f4,ffd5dc,ffdfbf`}
                                 alt={`${user.label}'s avatar`}

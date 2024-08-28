@@ -26,7 +26,7 @@ const UserCard: React.FC<UserCardProps> = ({
             <AvatarImage
               src={
                 user.image ||
-                `https://api.dicebear.com/9.x/personas/svg?seed=${encodeURIComponent(
+                `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
                   user.name
                 )}&backgroundColor=d1d4f9,c0aede,b6e3f4,ffd5dc,ffdfbf`
               }
