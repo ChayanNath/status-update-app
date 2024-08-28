@@ -15,6 +15,8 @@ const userRoutes = require("./routes/userRoutes");
 
 const connectDB = require("./config/db");
 
+const scheduleFines = require("./utils/fineScheduler");
+
 const app = express();
 
 connectDB();
@@ -24,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN || "http://localhost:3000",
+    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
     credentials: true,
   })
 );
@@ -48,6 +50,8 @@ app.use(
   passport.authenticate("jwt", { session: false }),
   userRoutes
 );
+
+scheduleFines();
 
 // Handle production
 if (process.env.NODE_ENV === "production") {
