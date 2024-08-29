@@ -43,9 +43,10 @@ const formSchema = z.object({
 
 interface TeamFormProps {
   team: Team | null;
+  onFormSubmit: () => void;
 }
 
-const TeamForm: React.FC<TeamFormProps> = ({ team }) => {
+const TeamForm: React.FC<TeamFormProps> = ({ team, onFormSubmit }) => {
   const [usersWithoutTeam, setUsersWithoutTeam] = useState<Members[]>([]);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -85,6 +86,7 @@ const TeamForm: React.FC<TeamFormProps> = ({ team }) => {
         });
       } else {
         await addTeam(values);
+        onFormSubmit();
         toast({
           title: "Success",
           description: "Team created successfully",

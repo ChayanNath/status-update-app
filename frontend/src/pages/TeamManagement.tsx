@@ -11,16 +11,16 @@ const TeamManagement = () => {
   const [selectedTeamUsers, selectedTeamUserDetails] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
 
-  useEffect(() => {
-    const fetchTeams = async () => {
-      try {
-        const response = await getTeams();
-        setTeams(response);
-      } catch (error) {
-        console.error("Error fetching teams:", error);
-      }
-    };
+  const fetchTeams = async () => {
+    try {
+      const response = await getTeams();
+      setTeams(response);
+    } catch (error) {
+      console.error("Error fetching teams:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchTeams();
   }, []);
 
@@ -33,6 +33,10 @@ const TeamManagement = () => {
     } catch (error) {
       console.error("Error fetching user details", error);
     }
+  };
+
+  const onFormSubmitHandler = () => {
+    fetchTeams();
   };
 
   return (
@@ -60,8 +64,13 @@ const TeamManagement = () => {
           <div className="flex justify-between mb-2">
             <h1 className="text-2xl">Team Details</h1>
             <div>
-              <TeamForm team={null} />
-              {selectedTeam && <TeamForm team={selectedTeam} />}
+              <TeamForm team={null} onFormSubmit={onFormSubmitHandler} />
+              {selectedTeam && (
+                <TeamForm
+                  team={selectedTeam}
+                  onFormSubmit={onFormSubmitHandler}
+                />
+              )}
             </div>
           </div>
           {selectedTeamUsers && selectedTeamUsers.length > 0 ? (
