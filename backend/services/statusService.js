@@ -108,3 +108,22 @@ exports.getUserUpdates = async (userId, startDate, endDate) => {
     throw new Error("Error fetching user updates");
   }
 };
+
+exports.getStatus = async (userId, date) => {
+  try {
+    const query = {
+      user: userId,
+      date: {
+        $gte: new Date(date.setHours(0, 0, 0, 0)),
+        $lt: new Date(date.setHours(23, 59, 59, 999)),
+      },
+    };
+
+    const update = await Status.findOne(query).select("title description date");
+
+    return update;
+  } catch (error) {
+    console.error("Error fetching update:", error);
+    throw new Error("Error fetching update");
+  }
+};

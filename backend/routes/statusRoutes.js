@@ -13,4 +13,6 @@ router.get("/export", statusController.exportStatuses);
 
 router.get("/getUserUpdates", statusController.getUserUpdates);
 
+router.get("/get-status", statusController.getStatus);
+
 module.exports = router;
