@@ -132,3 +132,23 @@ exports.exportStatuses = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+exports.getStatus = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const date = new Date(req.query.date);
+
+    const response = await statusService.getStatus(userId, date);
+
+    if (response) {
+      res.status(200).json(response);
+    } else {
+      res
+        .status(200)
+        .json({ message: "No status found for the selected date" });
+    }
+  } catch (error) {
+    console.error("Error in getStatus controller:", error);
+    res.status(500).json({ message: error.message });
+  }
+};

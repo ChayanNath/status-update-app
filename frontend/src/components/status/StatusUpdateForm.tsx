@@ -31,7 +31,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { updateStatus } from "@/services/statusService";
+import { updateStatus, getStatus } from "@/services/statusService";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   title: z.string().min(2, { message: "Title must be at least 2 characters" }),
@@ -68,6 +69,40 @@ const StatusUpdateForm = () => {
       });
     }
   };
+
+  const handleDateSelect = async (date: Date | undefined) => {
+    if (date) {
+      form.setValue("date", date);
+      try {
+        const status = await getStatus(date);
+        if (status) {
+          form.reset({
+            title: status.title,
+            description: status.description,
+            date: new Date(status.date),
+          });
+        } else {
+          form.reset({
+            title: "",
+            description: "",
+            date,
+          });
+        }
+      } catch (error) {
+        form.reset({
+          title: "",
+          description: "",
+          date,
+        });
+        console.error(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const currentDate = new Date();
+    handleDateSelect(currentDate);
+  }, []);
 
   return (
     <Card className="w-[550px]">
@@ -107,7 +142,7 @@ const StatusUpdateForm = () => {
                         toDate={new Date()}
                         mode="single"
                         selected={field.value}
-                        onSelect={(date) => field.onChange(date)}
+                        onSelect={handleDateSelect}
                         initialFocus
                       />
                     </PopoverContent>
