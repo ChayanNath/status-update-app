@@ -54,8 +54,7 @@ const StatusUpdateForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await updateStatus(values);
-      console.log(response);
+      await updateStatus(values);
       toast({
         title: "Update Submitted",
         description: "Your status update has been submitted successfully.",
