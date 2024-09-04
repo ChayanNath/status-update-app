@@ -6,6 +6,7 @@ import {
   IconUsersGroup,
   IconLayoutDashboard,
   IconUserBolt,
+  IconCalendar,
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
@@ -48,6 +49,13 @@ export function AppSidebar() {
       href: "/user-management",
       icon: (
         <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
+    {
+      label: "Holiday Management",
+      href: "/holiday-management",
+      icon: (
+        <IconCalendar className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
   ];

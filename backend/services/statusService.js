@@ -1,7 +1,7 @@
 const Status = require("../models/Status");
 const User = require("../models/User");
 const Team = require("../models/Team");
-const excelExporter = require("../utils/excelExporter");
+const { excelExporter } = require("../utils/excelExporter");
 
 exports.addStatus = async (title, description, userId, date) => {
   const user = await User.findById(userId).populate("team");
