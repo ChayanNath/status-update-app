@@ -119,11 +119,12 @@ const processUploadedHolidayFile = async (filePath) => {
       holidays.push({ date, event, isOptional });
     }
   });
-
   for (const holiday of holidays) {
     await Holiday.updateOne(
       { date: holiday.date },
-      { ...holiday },
+      {
+        event: holiday.event,
+      },
       { upsert: true }
     );
   }

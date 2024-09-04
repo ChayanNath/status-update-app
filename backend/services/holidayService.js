@@ -1,5 +1,8 @@
 const Holiday = require("../models/Holiday");
-const { generateHolidayTemplate } = require("../utils/excelExporter");
+const {
+  generateHolidayTemplate,
+  processUploadedHolidayFile,
+} = require("../utils/excelExporter");
 
 exports.downloadHolidayTemplate = async () => {
   try {
@@ -12,7 +15,7 @@ exports.downloadHolidayTemplate = async () => {
 
 exports.getHolidays = async () => {
   try {
-    const holidays = await Holiday.find({}).lean();
+    const holidays = await Holiday.find({});
     return holidays;
   } catch (error) {
     throw new Error("Error fetching holidays");
@@ -21,7 +24,7 @@ exports.getHolidays = async () => {
 
 exports.processUploadedHolidayFile = async (filePath) => {
   try {
-    const message = await holidayService.processUploadedHolidayFile(filePath);
+    const message = await processUploadedHolidayFile(filePath);
     return message;
   } catch (error) {
     throw new Error("Error processing uploaded holiday file");
