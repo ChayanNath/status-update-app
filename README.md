@@ -93,64 +93,6 @@ You can use Docker Compose to easily set up and run the application. Docker Comp
    http://localhost:3000
    ```
 
-#### 2. Docker Compose File
-
-Here is an example of a `docker-compose.yml` file used for this application:
-
-```yaml
-version: "3.8"
-
-services:
-  mongo:
-    image: mongo:latest
-    container_name: db_container
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-    volumes:
-      - mongo_data:/data/db
-
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: backend
-    environment:
-      PORT: 5000
-      DATABASE_URL: mongodb://root:example@mongo:27017/status-update-app?authSource=admin
-      SESSION_SECRET: your_session_secret
-      PASSPORT_STRATEGY_CONFIG: your_passport_strategy_config
-    ports:
-      - "5000:5000"
-    depends_on:
-      - mongo
-    volumes:
-      - ./backend:/app
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: frontend
-    environment:
-      REACT_APP_API_URL: http://localhost:5000
-    ports:
-      - "3000:3000"
-    depends_on:
-      - backend
-    volumes:
-      - ./frontend:/app
-
-volumes:
-  mongo_data:
-```
-
-### Notes
-
-- **Volumes:** The MongoDB data is stored in a Docker volume named `mongo_data` to persist data across container restarts.
-- **Dependencies:** The backend service depends on the MongoDB service, and the frontend depends on the backend, ensuring the proper startup order.
 
 #### 3. Stopping and Removing Containers
 
