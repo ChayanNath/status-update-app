@@ -63,7 +63,6 @@ const StatusUpdateForm = () => {
         description: "Your status update has been submitted successfully.",
         variant: "default",
       });
-      // Route to dashboard on success using the react navigator
       navigate("/dashboard");
     } catch (error) {
       toast({
