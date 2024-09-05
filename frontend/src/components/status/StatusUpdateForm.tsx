@@ -33,6 +33,7 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { updateStatus, getStatus } from "@/services/statusService";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const formSchema = z.object({
   title: z.string().min(2, { message: "Title must be at least 2 characters" }),
@@ -43,6 +44,8 @@ const formSchema = z.object({
 });
 
 const StatusUpdateForm = () => {
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -60,6 +63,8 @@ const StatusUpdateForm = () => {
         description: "Your status update has been submitted successfully.",
         variant: "default",
       });
+      // Route to dashboard on success using the react navigator
+      navigate("/dashboard");
     } catch (error) {
       toast({
         title: "Submission Failed",
