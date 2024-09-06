@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:5000/api", // Replace with your API base URL
+  baseURL: "http://localhost:8080/api", // Adjusted base URL
   withCredentials: true, // Ensures cookies are sent with every request
 });
 
