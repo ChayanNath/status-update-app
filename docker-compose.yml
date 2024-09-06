@@ -1,0 +1,69 @@
+services:
+  mongo_primary:
+    container_name: mongo_primary
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017" # Expose MongoDB port to the host
+    command: ["mongod", "--replSet", "rs0"]
+    volumes:
+      - mongo_primary:/data/db
+
+  mongo_secondary:
+    container_name: mongo_secondary
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27018:27017" # Expose another port for secondary
+    command: ["mongod", "--replSet", "rs0"]
+    volumes:
+      - mongo_secondary:/data/db
+
+  mongo_arbiter:
+    container_name: mongo_arbiter
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27019:27017" # Expose another port for arbiter
+    command: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0"]
+    volumes:
+      - mongo_arbiter:/data/db
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/app
+    ports:
+      - "5000:5000"
+    environment:
+      MONGO_URI: ${MONGO_URI}
+      PORT: ${PORT}
+      SECRET_KEY: ${SECRET_KEY}
+      NODE_ENV: ${NODE_ENV}
+      CLIENT_ORIGIN: ${CLIENT_ORIGIN}
+      ADMIN_USERNAME: ${ADMIN_USERNAME}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+    depends_on:
+      - mongo_primary
+      - mongo_secondary
+      - mongo_arbiter
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+    depends_on:
+      - backend
+
+volumes:
+  mongo_primary:
+  mongo_secondary:
+  mongo_arbiter:

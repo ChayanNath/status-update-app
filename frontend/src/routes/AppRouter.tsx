@@ -11,6 +11,7 @@ import Layout from "@/components/layout/Layout";
 import TeamManagement from "@/pages/TeamManagement";
 import UserManagement from "@/pages/UserManagement";
 import StatusUpdate from "@/pages/StatusUpdate";
+import HolidayManagement from "@/pages/HolidayManagement";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
           { path: "update-status", element: <StatusUpdate /> },
           { path: "team-management", element: <TeamManagement /> },
           { path: "user-management", element: <UserManagement /> },
+          { path: "holiday-management", element: <HolidayManagement /> },
         ],
       },
     ],

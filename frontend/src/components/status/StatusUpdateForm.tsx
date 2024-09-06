@@ -33,6 +33,7 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { updateStatus, getStatus } from "@/services/statusService";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const formSchema = z.object({
   title: z.string().min(2, { message: "Title must be at least 2 characters" }),
@@ -43,6 +44,8 @@ const formSchema = z.object({
 });
 
 const StatusUpdateForm = () => {
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,13 +57,13 @@ const StatusUpdateForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await updateStatus(values);
-      console.log(response);
+      await updateStatus(values);
       toast({
         title: "Update Submitted",
         description: "Your status update has been submitted successfully.",
         variant: "default",
       });
+      navigate("/dashboard");
     } catch (error) {
       toast({
         title: "Submission Failed",

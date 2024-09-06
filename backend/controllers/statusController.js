@@ -144,7 +144,7 @@ exports.getStatus = async (req, res) => {
       res.status(200).json(response);
     } else {
       res
-        .status(200)
+        .status(400)
         .json({ message: "No status found for the selected date" });
     }
   } catch (error) {
