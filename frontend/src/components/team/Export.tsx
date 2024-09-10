@@ -22,6 +22,8 @@ interface ExportProps {
 }
 
 export function Export({ teamId }: ExportProps) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const [date, setDate] = useState<DateRange | undefined>({
     from: new Date(new Date().getFullYear(), 0, 1),
     to: new Date(new Date().setHours(23, 59, 59, 999)),
@@ -44,15 +46,18 @@ export function Export({ teamId }: ExportProps) {
       document.body.appendChild(link);
       link.click();
       link.remove();
+      setIsDialogOpen(false);
     } catch (error) {
       console.error("Failed to export statuses:", error);
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Export</Button>
+        <Button variant="outline" onClick={() => setIsDialogOpen(true)}>
+          Export
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
