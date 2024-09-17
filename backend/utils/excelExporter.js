@@ -41,6 +41,7 @@ const excelExporter = async (statuses, startDate, endDate) => {
       { header: "Date", key: "date", width: 20 },
       { header: "Title", key: "title", width: 30 },
       { header: "Description", key: "description", width: 50 },
+      { header: "Fine", key: "fine", width: 10 },
     ];
 
     const statusByDate = statusesByUser[username].reduce((acc, status) => {
@@ -57,6 +58,7 @@ const excelExporter = async (statuses, startDate, endDate) => {
         date: date.toLocaleDateString(),
         title: status.title,
         description: status.description.replace(/\n/g, "\r\n"),
+        fine: status.fine,
       });
 
       row.getCell("description").alignment = { wrapText: true };
