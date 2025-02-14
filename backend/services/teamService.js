@@ -8,28 +8,24 @@ exports.createTeam = async (name, teamMembers, description) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
-    // Create the team
     const team = new Team({ name, description });
     await team.save({ session });
 
     if (teamMembers && teamMembers.length > 0) {
-      // Update team members
       await User.updateMany(
         { _id: { $in: teamMembers } },
         { $set: { team: team._id } },
         { session }
       );
 
-      // Add members to team
       team.members = teamMembers;
       await team.save({ session });
     }
 
-    // Query the team again to populate it
     const populatedTeam = await Team.findById(team._id)
-      .populate("members", "firstName lastName") // Populate firstName and lastName of User
+      .populate("members", "firstName lastName")
       .session(session)
-      .select("name members description"); // Select only the name and members fields
+      .select("name members description");
 
     await session.commitTransaction();
     session.endSession();
@@ -60,28 +56,25 @@ exports.updateTeam = async (teamId, name, teamMembers, description) => {
     }
 
     if (teamMembers && teamMembers.length > 0) {
-      // Remove current team members
       await User.updateMany(
         { team: team._id },
         { $unset: { team: "" } },
         { session }
       );
 
-      // Add new team members
       await User.updateMany(
         { _id: { $in: teamMembers } },
         { $set: { team: team._id } },
         { session }
       );
 
-      // Update the team's members field
       team.members = teamMembers;
     }
 
     await team.save({ session });
 
     const populatedTeam = await Team.findById(team._id)
-      .populate("members", "firstName lastName") // Populate firstName and lastName of User
+      .populate("members", "firstName lastName")
       .session(session);
 
     await session.commitTransaction();
@@ -105,14 +98,12 @@ exports.deleteTeam = async (teamId) => {
       throw new Error("Team not found");
     }
 
-    // Remove the team reference from users
     await User.updateMany(
       { team: teamId },
       { $unset: { team: "" } },
       { session }
     );
 
-    // Delete the team
     await Team.findByIdAndDelete(teamId).session(session);
 
     await session.commitTransaction();
@@ -136,11 +127,9 @@ exports.addMember = async (teamId, userId) => {
     throw new Error("User not found");
   }
 
-  // Add user ID to team members
   team.members.push(user._id);
   await team.save();
 
-  // Update user's team reference
   user.team = team._id;
   await user.save();
 
