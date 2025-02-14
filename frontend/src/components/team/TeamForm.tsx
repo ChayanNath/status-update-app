@@ -89,6 +89,7 @@ const TeamForm: React.FC<TeamFormProps> = ({ team, onFormSubmit }) => {
     try {
       if (team) {
         await updateTeam(team._id, values);
+        onFormSubmit();
         toast({
           title: "Success",
           description: "Team updated successfully",

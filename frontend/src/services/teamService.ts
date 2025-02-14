@@ -1,6 +1,12 @@
 import { AddTeam } from "@/types/team";
 import apiClient from "./apiClient";
 
+interface UpdateTeamData {
+  name: string;
+  description: string;
+  members: string[];
+}
+
 export const getTeams = async () => {
   const response = await apiClient.get("/team/getallteams");
   return response.data;
@@ -16,8 +22,12 @@ export const deleteTeam = async (teamId: string) => {
   return response.data;
 };
 
-export const updateTeam = async (teamId: string, teamData: AddTeam) => {
-  const response = await apiClient.put(`/team/${teamId}`, teamData);
+export const updateTeam = async (teamId: string, values: UpdateTeamData) => {
+  const response = await apiClient.put(`/team/${teamId}`, {
+    name: values.name,
+    description: values.description,
+    teamMembers: values.members,
+  });
   return response.data;
 };
 

@@ -38,7 +38,7 @@ exports.createTeam = async (name, teamMembers, description) => {
   }
 };
 
-exports.updateTeam = async (teamId, name, teamMembers, description) => {
+exports.updateTeam = async (teamId, name, description, teamMembers) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
@@ -47,15 +47,11 @@ exports.updateTeam = async (teamId, name, teamMembers, description) => {
       throw new Error("Team not found");
     }
 
-    if (name) {
-      team.name = name;
-    }
+    // Ensure we update all fields
+    team.name = name || team.name;
+    team.description = description || team.description;
 
-    if (description) {
-      team.description = description;
-    }
-
-    if (teamMembers && teamMembers.length > 0) {
+    if (teamMembers && Array.isArray(teamMembers)) {
       await User.updateMany(
         { team: team._id },
         { $unset: { team: "" } },

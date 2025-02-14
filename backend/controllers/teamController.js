@@ -35,9 +35,16 @@ exports.deleteTeam = async (req, res) => {
 exports.updateTeam = async (req, res) => {
   try {
     const { teamId } = req.params;
-    const { name, teamMembers } = req.body;
-    const result = await teamService.updateTeam(teamId, name, teamMembers);
-    res.json(result);
+    const { name, description, teamMembers } = req.body;
+
+    const updatedTeam = await teamService.updateTeam(
+      teamId,
+      name,
+      description,
+      teamMembers
+    );
+
+    res.status(200).json(updatedTeam);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

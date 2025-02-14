@@ -25,13 +25,11 @@ const TeamDetailsPage: React.FC<TeamDetailsProps> = ({ team, users }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <p className="font-semibold">Team Name</p>
-              <p className="border p-2 rounded-md">{team?.name || "N/A"}</p>
+              <p className="border p-2 rounded-md">{team?.name}</p>
             </div>
             <div>
               <p className="font-semibold">Description</p>
-              <p className="border p-2 rounded-md">
-                {team?.description || "N/A"}
-              </p>
+              <p className="border p-2 rounded-md">{team?.description}</p>
             </div>
           </div>
         </CardContent>
@@ -70,7 +68,7 @@ const TeamDetailsPage: React.FC<TeamDetailsProps> = ({ team, users }) => {
                 ))}
               </ul>
             ) : (
-              <div>No team members</div>
+              <div>No team members added yet</div>
             )}
           </ScrollArea>
         </CardContent>

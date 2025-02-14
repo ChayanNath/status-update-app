@@ -35,8 +35,23 @@ const TeamManagement = () => {
     }
   };
 
-  const onFormSubmitHandler = () => {
-    fetchTeams();
+  const onFormSubmitHandler = async () => {
+    await fetchTeams();
+    // If there's a selected team, refresh its details too
+    if (selectedTeam) {
+      const updatedTeams = await getTeams();
+      const updatedTeam = updatedTeams.find(
+        (team: Team) => team._id === selectedTeam._id
+      );
+      if (updatedTeam) {
+        setSelectedTeam(updatedTeam);
+        const extractedIds = updatedTeam.members.map(
+          (user: { id: string }) => user.id
+        );
+        const response = await fetchUserWithIds(extractedIds);
+        selectedTeamUserDetails(response);
+      }
+    }
   };
 
   return (
@@ -73,7 +88,7 @@ const TeamManagement = () => {
               )}
             </div>
           </div>
-          {selectedTeamUsers && selectedTeamUsers.length > 0 ? (
+          {selectedTeam ? (
             <TeamDetailsPage users={selectedTeamUsers} team={selectedTeam} />
           ) : (
             <p>Select a team to view details</p>
