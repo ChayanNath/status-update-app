@@ -1,8 +1,8 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:8080/api", // Adjusted base URL
-  withCredentials: true, // Ensures cookies are sent with every request
+  baseURL: "http://localhost:5000/api",
+  withCredentials: true,
 });
 
 apiClient.interceptors.response.use(
@@ -15,7 +15,6 @@ apiClient.interceptors.response.use(
     if (response?.status === 401) {
       try {
         await apiClient.post("/auth/refresh-token");
-
         return apiClient(config as AxiosRequestConfig);
       } catch (refreshError) {
         localStorage.removeItem("user");
@@ -23,7 +22,6 @@ apiClient.interceptors.response.use(
         return Promise.reject(error);
       }
     }
-
     return Promise.reject(error);
   }
 );

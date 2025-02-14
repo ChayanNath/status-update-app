@@ -26,13 +26,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
+    origin: process.env.CLIENT_ORIGIN || "http://localhost:3000",
     credentials: true,
   })
 );
 
 app.use(passport.initialize());
-require("./config/passport")(passport); // Pass passport for configuration
+require("./config/passport")(passport);
 
 app.use("/api/auth", authRoutes);
 app.use(

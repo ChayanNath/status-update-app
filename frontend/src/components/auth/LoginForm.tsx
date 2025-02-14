@@ -48,13 +48,15 @@ const LoginForm = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const response = await login(values.username, values.password);
-
+      if (!response) {
+        throw new Error("Login failed");
+      }
       addUser(response);
       navigate("/dashboard");
-    } catch (error) {
+    } catch (error: unknown) {
       toast({
         title: "Login Failed",
-        description: "Incorrect username or password.",
+        description: error instanceof Error ? error.message : "Login failed",
         variant: "destructive",
       });
     }
@@ -62,7 +64,12 @@ const LoginForm = () => {
 
   return (
     <Card className="w-[350px]">
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          form.handleSubmit(onSubmit)(e);
+        }}
+      >
         <CardHeader>
           <CardTitle className="text-xl">Sign in</CardTitle>
           <CardDescription>to continue to Progress Tracker</CardDescription>

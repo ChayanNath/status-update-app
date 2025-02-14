@@ -1,9 +1,7 @@
-const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
-const mongoose = require("mongoose");
-const User = mongoose.model("User");
+const JwtStrategy = require("passport-jwt").Strategy;
+const User = require("../models/User");
 const dotenv = require("dotenv");
 
-// Load environment variables
 dotenv.config();
 
 const cookieExtractor = (req) => {
@@ -15,7 +13,7 @@ const cookieExtractor = (req) => {
 };
 
 const options = {
-  jwtFromRequest: cookieExtractor, // Extract JWT from cookies
+  jwtFromRequest: cookieExtractor,
   secretOrKey: process.env.SECRET_KEY,
 };
 
