@@ -62,7 +62,17 @@ const TeamForm: React.FC<TeamFormProps> = ({ team, onFormSubmit }) => {
     const fetchUsers = async () => {
       try {
         const users = await getUsersWithoutTeam();
-        setUsersWithoutTeam(users);
+        if (team) {
+          const allUsers = [...users];
+          team.members.forEach((member) => {
+            if (!allUsers.some((user) => user.id === member.id)) {
+              allUsers.push(member);
+            }
+          });
+          setUsersWithoutTeam(allUsers);
+        } else {
+          setUsersWithoutTeam(users);
+        }
       } catch (error) {
         toast({
           title: "Error",
@@ -73,7 +83,7 @@ const TeamForm: React.FC<TeamFormProps> = ({ team, onFormSubmit }) => {
     };
 
     fetchUsers();
-  }, []);
+  }, [team]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
