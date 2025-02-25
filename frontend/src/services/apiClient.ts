@@ -1,7 +1,8 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 const apiClient = axios.create({
-  baseURL: process.env.VITE_API_URL || "http://localhost:5000/api",
+  // TODO: Add the base URL of the API from the environment variables
+  baseURL: "http://10.88.125.45:5000/api",
   withCredentials: true,
 });
 
