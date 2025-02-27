@@ -38,6 +38,19 @@ services:
     networks:
       - app_network
 
+  init_replica_set:
+    image: mongo:latest
+    container_name: init_replica_set
+    depends_on:
+      - mongo_primary
+      - mongo_secondary
+      - mongo_arbiter
+    volumes:
+      - ./init-replica-set.sh:/scripts/init-replica-set.sh
+    entrypoint: ["bash", "/scripts/init-replica-set.sh"]
+    networks:
+      - app_network
+
   backend:
     build:
       context: ./backend
@@ -60,6 +73,7 @@ services:
       - mongo_primary
       - mongo_secondary
       - mongo_arbiter
+      - init_replica_set
 
   frontend:
     build:
