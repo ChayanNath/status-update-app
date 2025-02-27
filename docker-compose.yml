@@ -4,7 +4,6 @@ services:
   mongo_primary:
     container_name: mongo_primary
     image: mongo:latest
-    restart: unless-stopped
     ports:
       - "27017:27017"
     command: ["mongod", "--replSet", "rs0"]
@@ -14,7 +13,6 @@ services:
   mongo_secondary:
     container_name: mongo_secondary
     image: mongo:latest
-    restart: unless-stopped
     ports:
       - "27018:27017"
     command: ["mongod", "--replSet", "rs0"]
@@ -24,7 +22,6 @@ services:
   mongo_arbiter:
     container_name: mongo_arbiter
     image: mongo:latest
-    restart: unless-stopped
     ports:
       - "27019:27017"
     command: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0"]
