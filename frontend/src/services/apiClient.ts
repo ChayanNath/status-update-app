@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 const apiClient = axios.create({
   // TODO: Add the base URL of the API from the environment variables
-  baseURL: "http://10.88.125.45:5000/api",
+  baseURL: "http://10.88.125.45/api",
   withCredentials: true,
 });
 
