@@ -11,9 +11,6 @@ RUN npm install --prefer-offline --no-audit --progress=false
 # Copy the rest of the application code
 COPY . .
 
-ARG VITE_API_URL
-ENV VITE_API_URL=$VITE_API_URL
-
 # Build the frontend application
 RUN npm run build
 
