@@ -27,7 +27,6 @@ exports.login = async (req, res) => {
 
     const cookieOptions = {
       httpOnly: true,
-      secure: true,
       sameSite: "Strict",
     };
     res
@@ -48,7 +47,6 @@ exports.logout = async (req, res) => {
 
     res.cookie("token", "", {
       httpOnly: true,
-      secure: true,
       sameSite: "Strict",
       expires: new Date(0),
     });
@@ -72,7 +70,6 @@ exports.refreshToken = async (req, res) => {
 
     const cookieOptions = {
       httpOnly: true,
-      secure: true,
       sameSite: "Strict",
     };
 
